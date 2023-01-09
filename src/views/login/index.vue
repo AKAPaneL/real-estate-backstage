@@ -6,6 +6,20 @@
         <h3 class="title">Login Form</h3>
       </div>
 
+      <el-form-item v-if="isRegister" prop="email">
+        <span class="svg-container email">
+          <i class="el-icon-message" />
+        </span>
+        <el-input
+          ref="email"
+          v-model="loginForm.email"
+          placeholder="E-mail"
+          name="email"
+          type="text"
+          tabindex="1"
+        />
+      </el-form-item>
+
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -16,7 +30,7 @@
           placeholder="Username"
           name="username"
           type="text"
-          tabindex="1"
+          tabindex="2"
           auto-complete="on"
         />
       </el-form-item>
@@ -32,7 +46,7 @@
           :type="passwordType"
           placeholder="Password"
           name="password"
-          tabindex="2"
+          tabindex="3"
           auto-complete="on"
           @keyup.enter.native="handleLogin"
         />
@@ -41,11 +55,10 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{ isRegister?'注 册':'登 录' }}</el-button>
 
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
+        <span class="move-button">{{ isRegister?"已有":'没有' }}账号？<span @click="isRegister=!isRegister">点我{{ isRegister?'登录':'注册' }}</span> </span>
       </div>
 
     </el-form>
@@ -53,33 +66,30 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-
+import { register } from '@/api/user'
+import { identifier } from '@babel/types'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
     return {
+      isRegister: true,
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '',
+        email: '',
+        password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [
+          { required: true, trigger: 'blur', message: '请输入用户名' },
+          { min: 3, message: '用户名最少3个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, trigger: 'blur', message: '请输入密码' },
+          { min: 6, max: 12, message: '密码必须在 6-12 位之间', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, trigger: 'blur', message: '请输入邮箱' }
+        ]
       },
       loading: false,
       passwordType: 'password',
@@ -105,21 +115,43 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+    async handleLogin() {
+      await this.$refs.loginForm.validate()
+      this.loading = true
+      // 校验通过之后判断现在是什么表单
+      if (this.isRegister) {
+        // 调用注册接口
+        register(this.loginForm).then(() => {
+          // 注册成功之后 弹出提示
+          this.$message.success('注册成功')
+          this.loading = false
+          // 跳转到登录页
+          this.isRegister = false
+        }).catch(() => {
+          this.loading = false
+        })
+      } else {
+        // 如果是登录表单
+        const { username: identifier, password } = this.loginForm
+        this.$store.dispatch('user/login', { identifier, password }).then(() => {
+          this.$router.push({ path: this.redirect || '/' })
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
+      }
+      // if (valid) {
+      //   this.loading = true
+      //   this.$store.dispatch('user/login', this.loginForm).then(() => {
+      //     this.$router.push({ path: this.redirect || '/' })
+      //     this.loading = false
+      //   }).catch(() => {
+      //     this.loading = false
+      //   })
+      // } else {
+      //   console.log('error submit!!')
+      //   return false
+      // }
     }
   }
 }
@@ -191,15 +223,18 @@ $light_gray:#eee;
     margin: 0 auto;
     overflow: hidden;
   }
-
+  .el-button::v-deep span{
+    font-size: 18px;
+  }
   .tips {
     font-size: 14px;
     color: #fff;
     margin-bottom: 10px;
 
-    span {
-      &:first-of-type {
-        margin-right: 16px;
+    .move-button{
+      span {
+        cursor:pointer;
+        color: #66b1ff;
       }
     }
   }
@@ -210,6 +245,9 @@ $light_gray:#eee;
     vertical-align: middle;
     width: 30px;
     display: inline-block;
+    &.email i{
+      font-weight: 700;
+    }
   }
 
   .title-container {

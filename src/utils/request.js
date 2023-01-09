@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import { Message } from 'element-ui'
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -8,7 +8,7 @@ const service = axios.create({
 })
 
 // 添加请求拦截器
-axios.interceptors.request.use(function(config) {
+service.interceptors.request.use(function(config) {
   // 在发送请求之前做些什么
   return config
 }, function(error) {
@@ -17,13 +17,16 @@ axios.interceptors.request.use(function(config) {
 })
 
 // 添加响应拦截器
-axios.interceptors.response.use(function(response) {
+service.interceptors.response.use(function(response) {
   // 2xx 范围内的状态码都会触发该函数。
   // 对响应数据做点什么
-  return response
+  return response.data
 }, function(error) {
   // 超出 2xx 范围的状态码都会触发该函数。
   // 对响应错误做点什么
+  const { message: [{ messages: [{ message }] }] } = error.response.data
+  // 提示错误信息
+  Message.error(message)
   return Promise.reject(error)
 })
 
