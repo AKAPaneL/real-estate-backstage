@@ -67,7 +67,6 @@
 
 <script>
 import { register } from '@/api/user'
-import { identifier } from '@babel/types'
 export default {
   name: 'Login',
   data() {
