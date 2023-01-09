@@ -102,6 +102,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/house',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'house',
+        component: () => import('@/views/house/index'),
+        meta: { title: '房产管理', icon: 'user'}
+      }
+    ]
+  },
+  {
     path: '/nested',
     component: Layout,
     name: 'Nested',
