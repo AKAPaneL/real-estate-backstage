@@ -20,17 +20,20 @@ router.beforeEach(async(to, from, next) => {
   } else {
     // 如果是去除了登录页以外的页面 :
     // 1.判断是否有token值 :
-    // a) 如果有 要先获取用户的资料存在vuex中
+    // a) 如果有 :判断是否vuex已经有个人信息,如果没有 要先获取用户的资料存在vuex中
     // b)如果没有,则不准用户进去这个页面 应该要跳转到登录页
     if (store.getters.token) {
-      // debugger
-      // await store.dispatch('user/getUser')
-      console.log(store)
-      next()
+      if (!store.state.user.user) {
+        await store.dispatch('user/getUser')
+        next()
+      } else {
+        next()
+      }
     } else {
       next('/login')
     }
   }
+  NProgress.done()
   // set page title
   document.title = getPageTitle(to.meta.title)
 

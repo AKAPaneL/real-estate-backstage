@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store/index'
+import router from '@/router'
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -39,6 +40,8 @@ service.interceptors.response.use(function(response) {
       Message.error(message)
     }
   } else if (statusCode === 401) {
+    // 401 是指用户没找到 意味着用户失效了  应该跳到登录页
+    router.push('/login')
     Message.error(error.response.data.message)
   }
   return Promise.reject(error)

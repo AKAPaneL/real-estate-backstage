@@ -6,15 +6,14 @@ export default {
   namespaced: true,
   state: {
     userInfo: {},
-    user: {},
     token: getToken()
   },
   mutations: {
     setUser(state, user) {
-      state.user = user
+      state.userInfo = user
     },
     removeUser(state) {
-      state.user = {}
+      state.userInfo = {}
     },
     setToken(state, token) {
       state.token = token
@@ -42,9 +41,9 @@ export default {
       resetRouter()
     },
     // 获取用户信息接口
-    async getUser() {
+    async getUser({ commit }) {
       const res = await getUser()
-      console.log(res)
+      commit('setUser', res)
     }
   }
 }
