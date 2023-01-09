@@ -89,7 +89,18 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/category',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'category',
+        component: () => import('@/views/category/index'),
+        meta: { title: '分类管理', icon: 'table' }
+      }
+    ]
+  },
   {
     path: '/nested',
     component: Layout,
