@@ -1,6 +1,6 @@
 import { login } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-// import { resetRouter } from '@/router'
+import { resetRouter } from '@/router'
 
 export default {
   namespaced: true,
@@ -11,6 +11,9 @@ export default {
   mutations: {
     setUser(state, user) {
       state.user = user
+    },
+    removeUser(state) {
+      state.user = {}
     },
     setToken(state, token) {
       state.token = token
@@ -27,6 +30,15 @@ export default {
       const { jwt, user } = await login(data)
       commit('setToken', jwt)
       commit('setUser', user)
+    },
+    // 登出接口
+    logout({ commit }) {
+      // 删除token
+      commit('removeToken')
+      // 删除用户信息
+      commit('removeUser')
+      // 重置路由
+      resetRouter()
     }
   }
 }

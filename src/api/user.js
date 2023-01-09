@@ -10,3 +10,8 @@ export function login(data) {
   return request.post('/auth/local', data)
 }
 
+// 封装用户登出接口
+export function logout() {
+
+}
+
