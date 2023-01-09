@@ -16,6 +16,10 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import '@/directives'
 
+import components from './components'
+// Vue.use会触发install方法
+Vue.use(components)
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
