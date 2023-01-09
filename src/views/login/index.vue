@@ -58,7 +58,7 @@
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{ isRegister?'注 册':'登 录' }}</el-button>
 
       <div class="tips">
-        <span class="move-button">{{ isRegister?"已有":'没有' }}账号？<span @click="isRegister=!isRegister">点我{{ isRegister?'登录':'注册' }}</span> </span>
+        <span class="move-button">{{ isRegister?"已有":'没有' }}账号？<span @click="move">点我{{ isRegister?'登录':'注册' }}</span> </span>
       </div>
 
     </el-form>
@@ -151,6 +151,11 @@ export default {
       //   console.log('error submit!!')
       //   return false
       // }
+    },
+    move() {
+      // 先重置表单
+      this.isRegister = !this.isRegister
+      this.$refs.loginForm.resetFields()
     }
   }
 }
