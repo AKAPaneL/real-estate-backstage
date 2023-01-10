@@ -6,9 +6,9 @@ import { resetRouter } from '@/router'
 export default {
   namespaced: true,
   state: {
-    userInfo: {},
+    userInfo: '',
     token: getToken(),
-    permission: {}
+    permission: ''
   },
   mutations: {
     setUser(state, user) {
@@ -24,6 +24,9 @@ export default {
     removeToken(state) {
       state.token = ''
       removeToken()
+    },
+    setPermission(state, permission) {
+      state.permission = permission
     }
   },
   actions: {
@@ -33,8 +36,8 @@ export default {
       commit('setToken', jwt)
       commit('setUser', user)
       // 获取用户权限
-      // const res = await getUserPermission()
-      // console.log(res)
+      const res = await getUserPermission()
+      commit('setPermission', res)
     },
     // 登出接口
     logout({ commit }) {
@@ -49,6 +52,9 @@ export default {
     async getUser({ commit }) {
       const res = await getUser()
       commit('setUser', res)
+      // 获取用户权限
+      const per = await getUserPermission()
+      commit('setPermission', per)
     }
   }
 }
