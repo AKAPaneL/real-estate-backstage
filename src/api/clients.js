@@ -12,3 +12,8 @@ export function getClientsList(params) {
 export function getClientsCount() {
   return request.get('/clients/count')
 }
+
+// 删除客户信息
+export function deleteClient(id) {
+  return request.delete(`/clients/${id}`)
+}

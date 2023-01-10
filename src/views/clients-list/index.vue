@@ -53,9 +53,9 @@
             label="介绍"
           />
           <el-table-column label="操作" width="172px">
-            <template #default>
+            <template #default="{row}">
               <el-button type="primary">编辑</el-button>
-              <el-button type="danger">删除</el-button>
+              <el-button type="danger" @click="deleteClient(row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -72,7 +72,7 @@
   </div>
 </template>
 <script>
-import { getClientsList, getClientsCount } from '@/api/clients'
+import { getClientsList, getClientsCount, deleteClient } from '@/api/clients'
 import ClientHead from '@/assets/common/client-head.jpeg'
 export default {
   data() {
@@ -82,19 +82,20 @@ export default {
       select: '',
       total: 10,
       pageSize: 2,
+      start: 0,
       clientsList: []
     }
   },
   created() {
     this.loadClientsCount()
-    this.loadClientsList(0)
+    this.loadClientsList()
   },
   methods: {
     // 获取用户列表
-    async loadClientsList(start) {
+    async loadClientsList() {
       const res = await getClientsList({
         _limit: this.pageSize,
-        _start: start
+        _start: this.start
       })
       this.clientsList = res
     },
@@ -105,7 +106,22 @@ export default {
     },
     // 当页面改变的时候
     pageChange(page) {
-      this.loadClientsList((page - 1) * 2)
+      this.start = (page - 1) * 2
+      this.loadClientsList()
+    },
+    // 删除客户信息
+    async deleteClient(id) {
+      await this.$confirm('此操作将永久删除该客户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      // 如果点击确认  调用删除接口
+      await deleteClient(id)
+      // 删除成功之后弹出信息
+      this.$message.success('删除成功')
+      // 重新刷新页面
+      this.loadClientsList()
     }
   }
 }
