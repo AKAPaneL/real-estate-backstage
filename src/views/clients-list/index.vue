@@ -25,7 +25,7 @@
         >
           <el-table-column prop="image" label="图片" width="200px">
             <template #default="{row}">
-              <img :src="row.image" width="180px" height="180px">
+              <img v-imagerror="imagerror" :src="row.image" width="180px" height="180px">
             </template>
           </el-table-column>
           <el-table-column
@@ -73,9 +73,11 @@
 </template>
 <script>
 import { getClientsList, getClientsCount } from '@/api/clients'
+import ClientHead from '@/assets/common/client-head.jpeg'
 export default {
   data() {
     return {
+      imagerror: ClientHead,
       input: '',
       select: '',
       total: 10,
