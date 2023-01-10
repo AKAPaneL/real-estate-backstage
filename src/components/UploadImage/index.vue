@@ -1,12 +1,13 @@
 <template>
   <div>
     <el-upload
+      ref="imageUp"
       action="#"
       list-type="picture-card"
       :on-preview="preview"
       :on-remove="remove"
       :limit="1"
-      :file-list="fileList"
+      :file-list="imageUrl ? fileList : []"
       :http-request="customUpload"
     >
       <i class="el-icon-plus" />
@@ -15,6 +16,12 @@
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
   </div>
+  <!--
+    <el-upload
+
+  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+</el-upload>
+   -->
 </template>
 <script>
 var COS = require('cos-js-sdk-v5')
@@ -24,20 +31,32 @@ const cos = new COS({
 })
 
 export default {
+  props: {
+    imageUrl: String
+  },
   data() {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
-      fileList: []
+      fileList: [{ url: `${this.imageUrl}` }]
+    }
+  },
+  watch: {
+    imageUrl(value) {
+      if (value) {
+        this.fileList[0].url = value
+      }
     }
   },
   methods: {
     preview() {
       this.dialogImageUrl = this.fileList[0].url
+      console.log(this.dialogImageUrl)
       this.dialogVisible = true
     },
     remove() {
       this.fileList = []
+      this.$refs.imageUp.clearFiles()
     },
 
     // 上传图片至腾讯云
@@ -65,6 +84,8 @@ export default {
 
 }
 </script>
-<style>
-
+<style scoped>
+/* ::v-deep .el-upload--picture-card {
+    display: none;
+} */
 </style>
