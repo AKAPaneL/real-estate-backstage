@@ -84,7 +84,7 @@ export default {
         ],
         password: [
           { required: true, trigger: 'blur', message: '请输入密码' },
-          { min: 6, max: 12, message: '密码必须在 6-12 位之间', trigger: 'blur' }
+          { min: 5, max: 12, message: '密码必须在 6-12 位之间', trigger: 'blur' }
         ],
         email: [
           { required: true, trigger: 'blur', message: '请输入邮箱' }
@@ -125,7 +125,7 @@ export default {
           this.$message.success('注册成功')
           this.loading = false
           // 跳转到登录页
-          this.isRegister = false
+          this.move()
         }).catch(() => {
           this.loading = false
         })
@@ -134,6 +134,8 @@ export default {
         const { username: identifier, password } = this.loginForm
         this.$store.dispatch('user/login', { identifier, password }).then(() => {
           this.$router.push({ path: this.redirect || '/' })
+          this.$refs.loginForm.resetFields()
+          this.$message.success(`欢迎！${this.$store.state.user.userInfo.username}`)
           this.loading = false
         }).catch(() => {
           this.loading = false
@@ -154,8 +156,8 @@ export default {
     },
     move() {
       // 先重置表单
-      this.isRegister = !this.isRegister
       this.$refs.loginForm.resetFields()
+      this.isRegister = !this.isRegister
     }
   }
 }
