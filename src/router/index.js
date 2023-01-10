@@ -30,6 +30,24 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+import AgentsList from './modules/AgentsList'
+import ClientsList from './modules/ClientsList'
+import CategoriesList from './modules/CategoriesList'
+import PagesList from './modules/PagesList'
+import PermissionsList from './modules/PermissionsList'
+import RolesList from './modules/RolesList'
+import UsersList from './modules/UsersList'
+import PropertiesList from './modules/PropertiesList'
+const routes = [
+  AgentsList,
+  PropertiesList,
+  CategoriesList,
+  PagesList,
+  ClientsList,
+  UsersList,
+  RolesList,
+  PermissionsList
+]
 export const constantRoutes = [
   {
     path: '/login',
@@ -42,7 +60,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -53,83 +70,13 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
-  },
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-  {
-    path: '/category',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'category',
-        component: () => import('@/views/category/index'),
-        meta: { title: '分类管理', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/nested',
-    component: Layout,
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    }
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: [...constantRoutes, ...routes, { path: '*', redirect: '/404', hidden: true }]
 })
 
 const router = createRouter()

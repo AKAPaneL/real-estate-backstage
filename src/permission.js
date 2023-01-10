@@ -23,7 +23,7 @@ router.beforeEach(async(to, from, next) => {
     // a) 如果有 :判断是否vuex已经有个人信息,如果没有 要先获取用户的资料存在vuex中
     // b)如果没有,则不准用户进去这个页面 应该要跳转到登录页
     if (store.getters.token) {
-      if (!store.state.user.user) {
+      if (!store.state.user.userInfo) {
         await store.dispatch('user/getUser')
         next()
       } else {
