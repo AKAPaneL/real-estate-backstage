@@ -1,12 +1,14 @@
 import { login, getUser } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getUserPermission } from '@/api/permission'
 import { resetRouter } from '@/router'
 
 export default {
   namespaced: true,
   state: {
     userInfo: {},
-    token: getToken()
+    token: getToken(),
+    permission: {}
   },
   mutations: {
     setUser(state, user) {
@@ -30,6 +32,9 @@ export default {
       const { jwt, user } = await login(data)
       commit('setToken', jwt)
       commit('setUser', user)
+      // 获取用户权限
+      // const res = await getUserPermission()
+      // console.log(res)
     },
     // 登出接口
     logout({ commit }) {
