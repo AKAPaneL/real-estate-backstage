@@ -14,6 +14,7 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import '@/directives'
 
 import components from './components'
 // Vue.use会触发install方法

@@ -1,19 +1,19 @@
-import { login } from '@/api/user'
+import { login, getUser } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 export default {
   namespaced: true,
   state: {
-    user: {},
+    userInfo: {},
     token: getToken()
   },
   mutations: {
     setUser(state, user) {
-      state.user = user
+      state.userInfo = user
     },
     removeUser(state) {
-      state.user = {}
+      state.userInfo = {}
     },
     setToken(state, token) {
       state.token = token
@@ -39,6 +39,11 @@ export default {
       commit('removeUser')
       // 重置路由
       resetRouter()
+    },
+    // 获取用户信息接口
+    async getUser({ commit }) {
+      const res = await getUser()
+      commit('setUser', res)
     }
   }
 }
