@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/agents-list'),
       meta: {
         title: '经济人管理',
-        icon: 'lock'
+        icon: 'user'
       }
     }
   ]

@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/clients-list'),
       meta: {
         title: '客户管理',
-        icon: 'lock'
+        icon: 'form'
       }
     }
   ]

@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/properties-list'),
       meta: {
         title: '房产管理',
-        icon: 'lock'
+        icon: 'example'
       }
     }
   ]

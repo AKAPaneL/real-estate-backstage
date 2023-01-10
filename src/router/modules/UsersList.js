@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/users-list'),
       meta: {
         title: '员工管理',
-        icon: 'lock'
+        icon: 'user'
       }
     }
   ]

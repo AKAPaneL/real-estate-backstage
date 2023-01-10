@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/roles-list'),
       meta: {
         title: '角色管理',
-        icon: 'lock'
+        icon: 'tree'
       }
     }
   ]
