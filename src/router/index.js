@@ -102,6 +102,30 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/rolesList',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'rolesList',
+        component: () => import('@/views/rolesList/index'),
+        meta: { title: '角色管理', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/usersList',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'usersList',
+        component: () => import('@/views/usersList/index'),
+        meta: { title: '员工管理', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: '/nested',
     component: Layout,
     name: 'Nested',
