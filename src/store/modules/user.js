@@ -55,6 +55,7 @@ export default {
       commit('setUser', res)
       // 获取用户权限
       const per = await getUserPermission()
+      console.log(per)
       commit('setPermission', per)
     }
   }
