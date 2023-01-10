@@ -9,7 +9,7 @@
                         <el-button slot="append" icon="el-icon-search" />
                     </el-input></span>
             </div>
-            <el-table #default="{ row }" :data="from" border style="width: 100%">
+            <el-table :data="from" border style="width: 100%">
                 <el-table-column prop="row" label="图片">
                     <template #default="{ row }">
                         <img :src="row.image" alt="" class="avatar">
@@ -44,7 +44,7 @@ export default {
         return {
             visible: false,
             page: 1,
-            size: 10,
+            size: 2,
             total: 0,
             parameter: {
                 // limit: 1,
