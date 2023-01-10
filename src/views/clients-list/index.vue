@@ -23,10 +23,11 @@
           border
           style="width: 100%"
         >
-          <el-table-column
-            prop="image"
-            label="图片"
-          />
+          <el-table-column prop="image" label="图片" width="200px">
+            <template #default="{row}">
+              <img :src="row.image" width="180px" height="180px">
+            </template>
+          </el-table-column>
           <el-table-column
             prop="name"
             label="昵称"
@@ -51,9 +52,12 @@
             prop="desc"
             label="介绍"
           />
-          <el-table-column
-            label="操作"
-          />
+          <el-table-column label="操作" width="172px">
+            <template #default>
+              <el-button type="primary">编辑</el-button>
+              <el-button type="danger">删除</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <!-- 分页组件 -->
         <el-pagination
@@ -61,13 +65,14 @@
           layout="prev, pager, next"
           :total="total"
           :page-size="pageSize"
+          @current-change="pageChange"
         />
       </div>
     </el-card>
   </div>
 </template>
 <script>
-import { getClientsList } from '@/api/clients'
+import { getClientsList, getClientsCount } from '@/api/clients'
 export default {
   data() {
     return {
@@ -75,22 +80,30 @@ export default {
       select: '',
       total: 10,
       pageSize: 2,
-      clientsList: [
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }
-      ]
+      clientsList: []
     }
   },
   created() {
-    this.loadClientsList()
+    this.loadClientsCount()
+    this.loadClientsList(0)
   },
   methods: {
-    async loadClientsList() {
-      const res = await getClientsList()
+    // 获取用户列表
+    async loadClientsList(start) {
+      const res = await getClientsList({
+        _limit: this.pageSize,
+        _start: start
+      })
       this.clientsList = res
+    },
+    // 获取列表总数量
+    async loadClientsCount() {
+      const res = await getClientsCount()
+      this.total = res
+    },
+    // 当页面改变的时候
+    pageChange(page) {
+      this.loadClientsList((page - 1) * 2)
     }
   }
 }
