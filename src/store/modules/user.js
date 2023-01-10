@@ -1,19 +1,22 @@
-import { login } from '@/api/user'
+import { login, getUser } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getUserPermission } from '@/api/permission'
 import { resetRouter } from '@/router'
 
 export default {
   namespaced: true,
   state: {
-    user: {},
-    token: getToken()
+    userInfo: '',
+    token: getToken(),
+    permission: ''
   },
   mutations: {
     setUser(state, user) {
-      state.user = user
+      state.userInfo = user
     },
     removeUser(state) {
-      state.user = {}
+      state.userInfo = ''
+      state.permission = ''
     },
     setToken(state, token) {
       state.token = token
@@ -22,6 +25,9 @@ export default {
     removeToken(state) {
       state.token = ''
       removeToken()
+    },
+    setPermission(state, permission) {
+      state.permission = permission
     }
   },
   actions: {
@@ -30,6 +36,9 @@ export default {
       const { jwt, user } = await login(data)
       commit('setToken', jwt)
       commit('setUser', user)
+      // 获取用户权限
+      const res = await getUserPermission()
+      commit('setPermission', res)
     },
     // 登出接口
     logout({ commit }) {
@@ -39,6 +48,15 @@ export default {
       commit('removeUser')
       // 重置路由
       resetRouter()
+    },
+    // 获取用户信息接口
+    async getUser({ commit }) {
+      const res = await getUser()
+      commit('setUser', res)
+      // 获取用户权限
+      const per = await getUserPermission()
+      console.log(per)
+      commit('setPermission', per)
     }
   }
 }

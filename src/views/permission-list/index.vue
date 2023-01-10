@@ -1,5 +1,7 @@
 <template>
-  <div>这是房产管理</div>
+  <div>
+    权限管理
+  </div>
 </template>
 <script>
 export default {}

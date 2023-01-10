@@ -15,3 +15,8 @@ export function logout() {
 
 }
 
+// 获取用户信息接口
+export function getUser() {
+  return request.get('/users/me')
+}
+
