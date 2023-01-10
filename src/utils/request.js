@@ -40,7 +40,8 @@ service.interceptors.response.use(function(response) {
       Message.error(message)
     }
   } else if (statusCode === 401) {
-    // 401 是指用户没找到 意味着用户失效了  应该跳到登录页
+    // 401 是指用户没找到 意味着用户失效了 调用登出接口  应该跳到登录页
+    store.dispatch('user/logout')
     router.push('/login')
     Message.error(error.response.data.message)
   }

@@ -15,7 +15,8 @@ export default {
       state.userInfo = user
     },
     removeUser(state) {
-      state.userInfo = {}
+      state.userInfo = ''
+      state.permission = ''
     },
     setToken(state, token) {
       state.token = token
