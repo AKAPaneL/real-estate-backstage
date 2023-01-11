@@ -8,7 +8,6 @@ export function getCategory(params) {
 // 封装获取分类数量
 export function getCategoryCount(data) {
   if (data) {
-    console.log(123333)
     return request.get(`/categories/count?title_contains=${data}`)
   }
   return request.get(`/categories/count`)
@@ -30,6 +29,6 @@ export function changeCategory(data) {
 }
 
 // 删除分类
-export function delCategory(id){
+export function delCategory(id) {
   return request.delete(`/categories/${id}`)
 }

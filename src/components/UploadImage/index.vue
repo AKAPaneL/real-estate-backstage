@@ -1,7 +1,15 @@
 <template>
   <div>
-    <el-upload ref="imageUp" action="#" list-type="picture-card" :on-preview="preview" :on-remove="remove" :limit="1"
-      :file-list="imageUrl ? fileList : []" :http-request="customUpload">
+    <el-upload
+      ref="imageUp"
+      action="#"
+      list-type="picture-card"
+      :on-preview="preview"
+      :on-remove="remove"
+      :limit="1"
+      :file-list="imageUrl ? [{ url: `${imageUrl}` }] : []"
+      :http-request="customUpload"
+    >
       <i class="el-icon-plus" />
     </el-upload>
     <el-dialog :visible.sync="dialogVisible">
@@ -33,16 +41,16 @@ export default {
       fileList: [{}]
     }
   },
-  watch: {
-    imageUrl(value) {
-      if (value) {
-        this.fileList[0].url = value
-      }
-    }
-  },
+  // watch: {
+  //   imageUrl(value) {
+  //     if (value) {
+  //       this.fileList[0].url = value
+  //     }
+  //   }
+  // },
   methods: {
     preview() {
-      this.dialogImageUrl = this.fileList[0].url
+      this.dialogImageUrl = this.imageUrl
       console.log(this.dialogImageUrl)
       this.dialogVisible = true
     },
@@ -59,7 +67,7 @@ export default {
         Key: file.name, /* 存储在桶里的对象键（例如:1.jpg，a/b/test.txt，图片.jpg）支持中文，必须字段 */
         Body: file, // 上传文件对象
         SliceSize: 1024 * 1024 * 5, /* 触发分块上传的阈值，超过5MB使用分块上传，小于5MB使用简单上传。可自行设置，非必须 */
-        onProgress: function (progressData) {
+        onProgress: function(progressData) {
           console.log(JSON.stringify(progressData))
         }
       }, (err, data) => {

@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/pages-list'),
       meta: {
         title: '页面管理',
-        icon: 'lock'
+        icon: 'table'
       }
     }
   ]
