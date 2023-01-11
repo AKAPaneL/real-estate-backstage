@@ -1,15 +1,7 @@
 <template>
   <div>
-    <el-upload
-      ref="imageUp"
-      action="#"
-      list-type="picture-card"
-      :on-preview="preview"
-      :on-remove="remove"
-      :limit="1"
-      :file-list="imageUrl ? fileList : []"
-      :http-request="customUpload"
-    >
+    <el-upload ref="imageUp" action="#" list-type="picture-card" :on-preview="preview" :on-remove="remove" :limit="1"
+      :file-list="imageUrl ? fileList : []" :http-request="customUpload">
       <i class="el-icon-plus" />
     </el-upload>
     <el-dialog :visible.sync="dialogVisible">
@@ -38,7 +30,7 @@ export default {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
-      fileList: [{ url: `${this.imageUrl}` }]
+      fileList: [{}]
     }
   },
   watch: {
@@ -56,7 +48,7 @@ export default {
     },
     remove() {
       this.fileList = []
-      this.$refs.imageUp.clearFiles()
+      this.$emit('delete')
     },
 
     // 上传图片至腾讯云
@@ -67,7 +59,7 @@ export default {
         Key: file.name, /* 存储在桶里的对象键（例如:1.jpg，a/b/test.txt，图片.jpg）支持中文，必须字段 */
         Body: file, // 上传文件对象
         SliceSize: 1024 * 1024 * 5, /* 触发分块上传的阈值，超过5MB使用分块上传，小于5MB使用简单上传。可自行设置，非必须 */
-        onProgress: function(progressData) {
+        onProgress: function (progressData) {
           console.log(JSON.stringify(progressData))
         }
       }, (err, data) => {
@@ -76,7 +68,11 @@ export default {
         } else {
           console.log('上传成功')
           this.fileList = [{ url: `http://${data.Location}` }]
-          this.$emit('image', this.fileList[0].url)
+          if (this.fileList) {
+            this.$emit('image', this.fileList[0].url)
+          } else {
+            this.$emit('image', 'https://fd.co188.com/group1/M04/5D/96/rBBhH11H-H6AMoWYAB5mkmBK0Fc405.jpg')
+          }
         }
       })
     }
