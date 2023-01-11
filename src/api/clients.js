@@ -9,7 +9,10 @@ export function getClientsList(params) {
 
 // 获取客户数量
 // {name_contains,agent}  两个参数   不传得到所有数量
-export function getClientsCount() {
+export function getClientsCount(params) {
+  if (params) {
+    return request.get('/clients/count', { params })
+  }
   return request.get('/clients/count')
 }
 

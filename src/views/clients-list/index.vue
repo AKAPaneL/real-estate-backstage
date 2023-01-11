@@ -6,10 +6,9 @@
         <el-button type="primary" @click="visible=true">添加客户</el-button>
         <div class="search">
           <el-input v-model="input" placeholder="请输入内容" class="input-with-select">
-            <el-select slot="prepend" v-model="select" placeholder="经纪人">
-              <el-option label="全部经纪人" value="1" />
-              <el-option label="张某" value="2" />
-              <el-option label="关某" value="3" />
+            <el-select slot="prepend" v-model="agent" placeholder="经纪人" @change="getClientsListByAgent">
+              <el-option label="全部经纪人" value="全部经纪人" />
+              <el-option v-for="item in agentList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
             <el-button slot="append" icon="el-icon-search" />
           </el-input>
@@ -77,6 +76,27 @@
 import { getClientsList, getClientsCount, deleteClient } from '@/api/clients'
 import formDialog from './components/form-dialog.vue'
 import ClientHead from '@/assets/common/client-head.jpeg'
+// 根据数据获取 单个 经济 的id和name 列表
+function getAgentList(res) {
+  let arr = []
+  res.forEach((item) => {
+    if (item.agent && item.agent.name) {
+      arr.push(item.agent.name)
+    }
+  })
+  // 去重
+  arr = Array.from(new Set(arr))
+  const newArr = arr.map((value) => {
+    const client = res.find((item) => {
+      if (item.agent && item.agent.name) {
+        return item.agent.name === value
+      }
+      return false
+    })
+    return { id: client.agent.id, name: client.agent.name }
+  })
+  return newArr
+}
 export default {
   components: {
     formDialog
@@ -86,30 +106,88 @@ export default {
       visible: false,
       imagerror: ClientHead,
       input: '',
-      select: '',
+      agent: '全部经纪人',
       total: 10,
       pageSize: 2,
       start: 0,
-      clientsList: []
+      name_contains: '',
+      clientsList: [],
+      agentList: []
     }
   },
   created() {
     this.loadClientsCount()
     this.loadClientsList()
+    this.loadAgentList()
   },
   methods: {
-    // 获取用户列表
+    // 获取 用户列表 要判断是否有参数
     async loadClientsList() {
-      const res = await getClientsList({
-        _limit: this.pageSize,
-        _start: this.start
-      })
+      let res = {}
+      // 如果没有参数
+      if (!(this.name_contains || this.agent !== '全部经纪人')) {
+        res = await getClientsList({
+          _limit: this.pageSize,
+          _start: this.start
+        })
+      } else if (this.name_contains) {
+        // 如果有一个搜索参数
+        res = await getClientsList({
+          _limit: this.pageSize,
+          _start: this.start,
+          name_contains: this.name_contains
+        })
+      } else if (this.agent !== '全部经纪人') {
+        // 如果有一个经纪人参数 且不能是 ‘全部经纪人’
+        res = await getClientsList({
+          _limit: this.pageSize,
+          _start: this.start,
+          agent: this.agent
+        })
+      } else {
+        // 两个参数都有
+        res = await getClientsList({
+          _limit: this.pageSize,
+          _start: this.start,
+          name_contains: this.name_contains,
+          agent: this.agent
+        })
+      }
       this.clientsList = res
     },
-    // 获取列表总数量
+    // 获取列表数量  也要判断参数
     async loadClientsCount() {
-      const res = await getClientsCount()
+      let res = {}
+      // 如果没有参数
+      if (!(this.name_contains || this.agent !== '全部经纪人')) {
+        res = await getClientsCount()
+      } else if (this.name_contains) {
+        // 如果有一个搜索参数
+        res = await getClientsCount({
+          name_contains: this.name_contains
+        })
+      } else if (this.agent !== '全部经纪人') {
+        // 如果有一个经纪人参数 且不能是 ‘全部经纪人’
+        res = await getClientsCount({
+          agent: this.agent
+        })
+      } else {
+        // 两个参数都有
+        res = await getClientsCount({
+          name_contains: this.name_contains,
+          agent: this.agent
+        })
+      }
+      console.log(res)
       this.total = res
+    },
+    // 获取全部客户的经济列表
+    async loadAgentList() {
+      const res = await getClientsList({
+        _limit: 99999,
+        _start: 0
+      })
+      this.agentList = getAgentList(res)
     },
     // 当页面改变的时候
     pageChange(page) {
@@ -129,6 +207,12 @@ export default {
       this.$message.success('删除成功')
       // 重新刷新页面
       this.loadClientsList()
+    },
+    // 通过经纪人获取列表
+    async getClientsListByAgent() {
+      this.start = 0
+      this.loadClientsList()
+      this.loadClientsCount()
     }
   }
 }
