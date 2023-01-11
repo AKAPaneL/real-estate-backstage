@@ -5,12 +5,12 @@
       <div slot="header" class="clearfix">
         <el-button type="primary" @click="visible=true">添加客户</el-button>
         <div class="search">
-          <el-input v-model="input" placeholder="请输入内容" class="input-with-select">
+          <el-input v-model="name_contains" placeholder="请输入内容" class="input-with-select" @input="getClientsListByAgent">
             <el-select slot="prepend" v-model="agent" placeholder="经纪人" @change="getClientsListByAgent">
               <el-option label="全部经纪人" value="全部经纪人" />
               <el-option v-for="item in agentList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
-            <el-button slot="append" icon="el-icon-search" />
+            <el-button slot="append" icon="el-icon-search" @click="getClientsListByAgent" />
           </el-input>
         </div>
       </div>
@@ -65,7 +65,8 @@
           layout="prev, pager, next"
           :total="total"
           :page-size="pageSize"
-          @current-change="pageChange"
+          :current-page.sync="currentPage"
+          @current-change="loadClientsList"
         />
         <form-dialog :visible="visible" />
       </div>
@@ -105,11 +106,11 @@ export default {
     return {
       visible: false,
       imagerror: ClientHead,
-      input: '',
-      agent: '全部经纪人',
+      currentPage: 1,
       total: 10,
       pageSize: 2,
       start: 0,
+      agent: '全部经纪人',
       name_contains: '',
       clientsList: [],
       agentList: []
@@ -128,27 +129,27 @@ export default {
       if (!(this.name_contains || this.agent !== '全部经纪人')) {
         res = await getClientsList({
           _limit: this.pageSize,
-          _start: this.start
+          _start: (this.currentPage - 1) * 2
         })
-      } else if (this.name_contains) {
+      } else if (this.name_contains && this.agent === '全部经纪人') {
         // 如果有一个搜索参数
         res = await getClientsList({
           _limit: this.pageSize,
-          _start: this.start,
+          _start: (this.currentPage - 1) * 2,
           name_contains: this.name_contains
         })
-      } else if (this.agent !== '全部经纪人') {
+      } else if (this.agent !== '全部经纪人' && !this.name_contains) {
         // 如果有一个经纪人参数 且不能是 ‘全部经纪人’
         res = await getClientsList({
           _limit: this.pageSize,
-          _start: this.start,
+          _start: (this.currentPage - 1) * 2,
           agent: this.agent
         })
       } else {
         // 两个参数都有
         res = await getClientsList({
           _limit: this.pageSize,
-          _start: this.start,
+          _start: (this.currentPage - 1) * 2,
           name_contains: this.name_contains,
           agent: this.agent
         })
@@ -178,7 +179,6 @@ export default {
           agent: this.agent
         })
       }
-      console.log(res)
       this.total = res
     },
     // 获取全部客户的经济列表
@@ -188,11 +188,6 @@ export default {
         _start: 0
       })
       this.agentList = getAgentList(res)
-    },
-    // 当页面改变的时候
-    pageChange(page) {
-      this.start = (page - 1) * 2
-      this.loadClientsList()
     },
     // 删除客户信息
     async deleteClient(id) {
@@ -205,8 +200,14 @@ export default {
       await deleteClient(id)
       // 删除成功之后弹出信息
       this.$message.success('删除成功')
-      // 重新刷新页面
-      this.loadClientsList()
+      this.total -= 1
+      // 重新刷新页面 刷新之前要判断 是否是最后一个数据
+      if (this.clientsList.length === 1) {
+        this.currentPage -= 1
+        this.loadClientsList()
+      } else {
+        this.loadClientsList()
+      }
     },
     // 通过经纪人获取列表
     async getClientsListByAgent() {
