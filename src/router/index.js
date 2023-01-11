@@ -30,6 +30,24 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+import AgentsList from './modules/AgentsList'
+import ClientsList from './modules/ClientsList'
+import CategoriesList from './modules/CategoriesList'
+import PagesList from './modules/PagesList'
+import PermissionsList from './modules/PermissionsList'
+import RolesList from './modules/RolesList'
+import UsersList from './modules/UsersList'
+import PropertiesList from './modules/PropertiesList'
+const routes = [
+  AgentsList,
+  PropertiesList,
+  CategoriesList,
+  PagesList,
+  ClientsList,
+  UsersList,
+  RolesList,
+  PermissionsList
+]
 export const constantRoutes = [
   {
     path: '/login',
@@ -42,7 +60,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -102,30 +119,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/rolesList',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'rolesList',
-        component: () => import('@/views/rolesList/index'),
-        meta: { title: '角色管理', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/usersList',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'usersList',
-        component: () => import('@/views/usersList/index'),
-        meta: { title: '员工管理', icon: 'table' }
-      }
-    ]
-  },
-  {
     path: '/nested',
     component: Layout,
     name: 'Nested',
@@ -153,7 +146,7 @@ export const constantRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: [...constantRoutes, ...routes, { path: '*', redirect: '/404', hidden: true }]
 })
 
 const router = createRouter()
