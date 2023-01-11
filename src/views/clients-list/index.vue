@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <!-- 卡片头部 -->
       <div slot="header" class="clearfix">
-        <el-button type="primary">添加客户</el-button>
+        <el-button type="primary" @click="visible=true">添加客户</el-button>
         <div class="search">
           <el-input v-model="input" placeholder="请输入内容" class="input-with-select">
             <el-select slot="prepend" v-model="select" placeholder="经纪人">
@@ -62,21 +62,28 @@
         <!-- 分页组件 -->
         <el-pagination
           background
+          :pager-count="5"
           layout="prev, pager, next"
           :total="total"
           :page-size="pageSize"
           @current-change="pageChange"
         />
+        <form-dialog :visible="visible" />
       </div>
     </el-card>
   </div>
 </template>
 <script>
 import { getClientsList, getClientsCount, deleteClient } from '@/api/clients'
+import formDialog from './components/form-dialog.vue'
 import ClientHead from '@/assets/common/client-head.jpeg'
 export default {
+  components: {
+    formDialog
+  },
   data() {
     return {
+      visible: false,
       imagerror: ClientHead,
       input: '',
       select: '',
