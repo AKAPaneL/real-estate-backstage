@@ -56,8 +56,7 @@ export default {
       ruleForm: {
         id: '',
         title: '',
-        content: '',
-        image: ''
+        content: ''
       }
     }
   },
@@ -91,8 +90,7 @@ export default {
       this.ruleForm = {
         id: '',
         title: '',
-        content: '',
-        image: ''
+        content: ''
       }
     },
     // —————————————————————————————————————————————————————————————————搜索

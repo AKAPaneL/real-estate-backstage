@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog :title="ruleForm.id ? '编辑分类' : '添加分类'" :visible="visible" @close="closeFn">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-position="left" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="ruleForm.title" />
         </el-form-item>
@@ -75,7 +75,7 @@ export default {
       this.imageUrl = url
     },
     deleteImg() {
-      console.log(1111);
+      console.log(1111)
       this.defaultImg = 'https://fd.co188.com/group1/M04/5D/96/rBBhH11H-H6AMoWYAB5mkmBK0Fc405.jpg'
     }
   }

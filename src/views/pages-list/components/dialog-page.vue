@@ -1,7 +1,18 @@
 <template>
   <div>
     <el-dialog :title="ruleForm.id ? '编辑页面' : '添加页面'" :visible="visible" @close="closeFn">
-      弹窗
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-position="left" label-width="80px">
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="ruleForm.title" />
+        </el-form-item>
+        <el-form-item label="内容" prop="content">
+          <quill-edi />
+        </el-form-item>
+        <el-form-item class="button-style">
+          <el-button type="primary" @click="submitForm(ruleForm)">确认</el-button>
+          <el-button @click="closeFn">取消</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -21,7 +32,7 @@ export default {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }
         ],
-        desc: [
+        content: [
           { required: true, message: '请输入描述', trigger: 'blur' }
         ]
       },
@@ -53,6 +64,7 @@ export default {
       this.$emit('closeDia')
     },
     closeFn() { // 关闭弹窗
+      this.$refs.ruleForm.resetFields()
       this.$emit('closeDia')
     },
     UploadImage(url) { // 接收腾讯云链接
