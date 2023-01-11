@@ -3,8 +3,8 @@
     <el-card class="box-card">
       <div class="header">
         <span><el-button type="primary" size="small" @click="visible = true">
-          添加分类
-        </el-button></span>
+            添加分类
+          </el-button></span>
         <span class="search-class">
           <el-input v-model="contains" placeholder="请输入内容">
             <el-button slot="append" icon="el-icon-search" @click="searchBtn" />
@@ -26,13 +26,8 @@
         </el-table-column>
       </el-table>
       <div class="block">
-        <el-pagination
-          layout="prev, pager, next"
-          :total="total"
-          :page-size="2"
-          :current-page="page"
-          @current-change="pageChange"
-        />
+        <el-pagination layout="prev, pager, next" :total="total" :page-size="2" :current-page="page"
+          @current-change="pageChange" />
       </div>
       <el-dialog :title="ruleForm.id ? '编辑分类' : '添加分类'" :visible="visible" @close="closeFn">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
@@ -179,30 +174,30 @@ export default {
 
 <style scoped>
 .box-card {
-    margin: 10px;
+  margin: 10px;
 }
 
 .header {
-    margin-bottom: 15px;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #DCDCDC;
+  margin-bottom: 15px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #DCDCDC;
 }
 
 .search-class {
-    float: right;
-    width: 700px;
+  float: right;
+  width: 700px;
 }
 
 .avatar {
-    width: 200px;
-    height: 200px;
+  width: 200px;
+  height: 200px;
 }
 
 .block {
-    text-align: center;
+  text-align: center;
 }
 
 .button-style {
-    text-align: right;
+  text-align: right;
 }
 </style>
