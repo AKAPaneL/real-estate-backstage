@@ -68,7 +68,7 @@
           :current-page.sync="currentPage"
           @current-change="loadClientsList"
         />
-        <form-dialog :visible="visible" />
+        <form-dialog :visible="visible" @close="visible=false" />
       </div>
     </el-card>
   </div>
