@@ -24,7 +24,7 @@
         <el-pagination layout="prev, pager, next" :total="total" :page-size="2" :current-page.sync="page"
           @current-change="pageChange" />
       </div>
-      <dialogCate :visible.sync="visible" :rule-form="ruleForm" @closeDia="closeDia" @update="getPageList" />
+      <dialogCate ref="formDialog" :visible.sync="visible" @close="closeDia" @update="getPageList" />
     </el-card>
 
   </div>
@@ -50,14 +50,8 @@ export default {
         title_contains: ''
       },
       // 整体数据form
-      form: [],
-      Edimg: '',
-      // 添加或编辑newForm
-      ruleForm: {
-        id: '',
-        title: '',
-        content: ''
-      }
+      form: []
+
     }
   },
   created() {
@@ -87,11 +81,7 @@ export default {
     // 关闭弹窗，清空表单
     closeDia() {
       this.visible = false
-      this.ruleForm = {
-        id: '',
-        title: '',
-        content: ''
-      }
+      this.$refs.formDialog.resetForm()
     },
     // —————————————————————————————————————————————————————————————————搜索
     async searchBtn() {
@@ -105,9 +95,7 @@ export default {
     async theEditor(id) {
       this.visible = true
       const res = await checkPageList(id)
-      console.log(res)
-      this.ruleForm = res
-      console.log(this.ruleForm)
+      this.$refs.formDialog.editor(res)
     },
     // —————————————————————————————————————————————————————————————————删除
     async deletePageList(id) {

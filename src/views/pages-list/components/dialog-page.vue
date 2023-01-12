@@ -1,24 +1,19 @@
 <template>
   <div>
-    <el-dialog :title="ruleForm.id ? '编辑页面' : '添加页面'" :visible="visible" @close="closeFn">
+    <el-dialog :title="ruleForm.id ? '编辑页面' : '添加页面'" :visible="visible" @close="$emit('close')">
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-position="left" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="ruleForm.title" />
         </el-form-item>
         <el-form-item label="内容" prop="content">
           <div class="local-quill-editor">
-            <quill-editor
-              ref="quill"
-              v-model="ruleForm.content"
-              :options="editorOption"
-              class="editor"
-              @blur="$refs.ruleForm.validateField('content')"
-            />
+            <quill-editor ref="quill" v-model="ruleForm.content" :options="editorOption" class="editor"
+              @blur="$refs.ruleForm.validateField('content')" />
           </div>
         </el-form-item>
         <el-form-item class="button-style">
           <el-button type="primary" @click="submitForm(ruleForm)">确认</el-button>
-          <el-button @click="closeFn">取消</el-button>
+          <el-button @click="$emit('close')">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -50,11 +45,7 @@ const toolbarOptions = [
 ]
 export default {
   props: {
-    visible: Boolean,
-    ruleForm: {
-      type: Object,
-      default: () => ({})
-    }
+    visible: Boolean
   },
   data() {
     return {
@@ -66,8 +57,6 @@ export default {
           { required: true, message: '请输入内容', trigger: 'blur' }
         ]
       },
-      imageUrl: '',
-      defaultImg: '',
       editorOption: {
         modules: {
           toolbar: toolbarOptions
@@ -76,7 +65,8 @@ export default {
         placeholder: ''
         // Some Quill optiosn...
       },
-      newForm: {
+      // 添加或编辑ruleForm
+      ruleForm: {
         id: '',
         title: '',
         content: ''
@@ -89,36 +79,39 @@ export default {
       await this.$refs.ruleForm.validate()
       if (form.id) {
         // 编辑
-        // 表单验证
-        // 解析出form中的内容
-        this.newForm = { ...form }
-        this.newForm.content = form.content.replace(/<[^>]+>/g, '')
+        const newForm = { ...this.ruleForm }
+        newForm.content = form.content.replace(/<[^>]+>/g, '')
         // 调用接口编辑
-        await changePageList(this.newForm)
-        // 刷新数据
-        this.$emit('update')
+        await changePageList(newForm)
         // 提示用户修改完成
         this.$message.success('修改成功')
-        // 关闭弹窗
-        this.closeFn()
       } else {
         // 添加功能
-        // 表单验证
-        this.newForm = { ...form }
-        this.newForm.content = form.content.replace(/<[^>]+>/g, '')
+        const newForm = { ...this.ruleForm }
+        newForm.content = form.content.replace(/<[^>]+>/g, '')
         // 调用接口添加
-        await addPageList(this.newForm)
-        // 刷新数据
-        this.$emit('update')
+        await addPageList(newForm)
         // 提示用户添加完成
         this.$message.success('添加成功')
-        // 关闭弹窗
-        this.closeFn()
+      }
+      // 刷新数据
+      this.$emit('update')
+      // 关闭弹窗
+      this.$emit('close')
+    },
+    resetForm() { // 清空表单
+      this.$refs.ruleForm.resetFields()
+      this.ruleForm = {
+        id: '',
+        title: '',
+        content: ''
       }
     },
-    closeFn() { // 关闭弹窗
-      this.$refs.ruleForm.resetFields()
-      this.$emit('closeDia')
+    // 接受编辑数据
+    editor(res) {
+      if (res.id) {
+        this.ruleForm = res
+      }
     }
   }
 }

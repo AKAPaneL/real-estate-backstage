@@ -37,7 +37,7 @@
           @current-change="pageChange"
         />
       </div>
-      <dialogCate :visible.sync="visible" :rule-form="ruleForm" @closeDia="closeDia" @update="getAgents" />
+      <dialogCate ref="diaLogAgents" :visible.sync="visible" @close="closeDia" @update="getAgents" />
     </el-card>
 
   </div>
@@ -63,17 +63,8 @@ export default {
         name_contains: ''
       },
       // 整体数据form
-      form: [],
-      Edimg: '',
+      form: []
       // 添加或编辑newForm
-      ruleForm: {
-        name: '',
-        email: '',
-        phone: '',
-        address: '',
-        desc: '',
-        image: ''
-      }
     }
   },
   created() {
@@ -103,12 +94,8 @@ export default {
     // 关闭弹窗，清空表单
     closeDia() {
       this.visible = false
-      this.ruleForm = {
-        id: '',
-        title: '',
-        desc: '',
-        image: ''
-      }
+      // 调用内部的方法  进行表单重置
+      this.$refs.diaLogAgents.resetForm()
     },
     // —————————————————————————————————————————————————————————————————搜索
     async searchBtn() {
@@ -122,7 +109,7 @@ export default {
     async theEditor(id) {
       this.visible = true
       const res = await checkAgents(id)
-      this.ruleForm = res
+      this.$refs.diaLogAgents.editor(res)
     },
     // —————————————————————————————————————————————————————————————————删除
     async deleteCategory(id) {
@@ -138,7 +125,9 @@ export default {
       this.total -= 1
       // 重新渲染页面,刷新之前要判断是否为最后一个数据
       if (this.form.length === 1) {
-        this.page -= 1
+        if (this.page > 1) {
+          this.page -= 1
+        }
         this.pageChange(this.page)
       } else {
         this.getAgents()

@@ -3,8 +3,8 @@
     <el-card class="box-card">
       <div class="header">
         <span><el-button type="primary" size="small" @click="visible = true">
-            添加分类
-          </el-button></span>
+          添加分类
+        </el-button></span>
         <span class="search-class">
           <el-input v-model="contains" placeholder="请输入内容">
             <el-button slot="append" icon="el-icon-search" @click="searchBtn" />
@@ -26,8 +26,13 @@
         </el-table-column>
       </el-table>
       <div class="block">
-        <el-pagination layout="prev, pager, next" :total="total" :page-size="2" :current-page.sync="page"
-          @current-change="pageChange" />
+        <el-pagination
+          layout="prev, pager, next"
+          :total="total"
+          :page-size="2"
+          :current-page.sync="page"
+          @current-change="pageChange"
+        />
       </div>
       <dialogCate ref="formDialog" :visible="visible" @close="closeDia" @update="getCategory" />
     </el-card>
@@ -71,7 +76,6 @@ export default {
     // 获取数据渲染页面
     async getCategory() {
       if (this.parameter.title_contains) {
-        console.log(111)
         const res = await getCategory(this.parameter)
         this.form = res
         const categoryCount = await getCategoryCount(this.parameter.title_contains)

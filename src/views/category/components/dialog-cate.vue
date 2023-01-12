@@ -23,7 +23,6 @@
 </template>
 <script>
 import { addCategory, changeCategory } from '@/api/category'
-import ClientHead from '@/assets/common/client-head.jpeg'
 export default {
   props: {
     visible: Boolean
@@ -38,7 +37,6 @@ export default {
           { required: true, message: '请输入描述', trigger: 'blur' }
         ]
       },
-      defaultImg: '',
       ruleForm: {
         title: '',
         desc: '',
@@ -49,7 +47,6 @@ export default {
   methods: {
     // ———————————————————————————————————————————————————————————————— 弹窗类方法
     updataImage(url) { // 图片显示
-      console.log(url)
       this.ruleForm.image = url
     },
     async submitForm(form) { // 提交分类
@@ -85,7 +82,6 @@ export default {
     // 数据回填方法
     editor(res) {
       if (res.title) {
-        console.log(res.image)
         this.ruleForm = res
       }
       this.$refs.upload.backImage(res.image)
