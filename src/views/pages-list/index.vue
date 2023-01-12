@@ -3,12 +3,13 @@
     <el-card class="box-card">
       <div class="header">
         <span><el-button type="primary" size="small" @click="visible = true">
-          页面
-          el-button></el-button></span>
+          添加页面
+        </el-button></span>
         <span class="search-class">
           <el-input v-model="contains" placeholder="请输入关键字">
             <el-button slot="append" @click="searchBtn">筛选</el-button>
           </el-input></span>
+        </span>
       </div>
       <el-table :data="form" border style="width: 100%">
         <el-table-column prop="title" label="标题" />
@@ -25,7 +26,7 @@
           layout="prev, pager, next"
           :total="total"
           :page-size="2"
-          :current-page="page"
+          :current-page.sync="page"
           @current-change="pageChange"
         />
       </div>
@@ -72,13 +73,13 @@ export default {
     // 获取数据渲染页面
     async getPageList() {
       if (this.parameter.title_contains) {
-        console.log(111)
         const res = await getPageList(this.parameter)
         this.form = res
         const categoryCount = await getPageListCount(this.parameter.title_contains)
         this.total = categoryCount
       } else {
         const { _limit, _start } = this.parameter
+        this._start = (this.page - 1) * 2
         const res = await getPageList({ _limit, _start })
         this.form = res
         const categoryCount = await getPageListCount('')
@@ -128,6 +129,7 @@ export default {
       this.total -= 1
       // 重新渲染页面,刷新之前要判断是否为最后一个数据
       if (this.form.length === 1) {
+        this.page -= 1
         this.pageChange(this.page)
       } else {
         this.getPageList()
@@ -160,5 +162,8 @@ export default {
 
 .block {
   text-align: center;
+  margin-top: 30px;
+  padding-top: 10px;
+  border-top: 1px solid #DCDCDC;
 }
 </style>

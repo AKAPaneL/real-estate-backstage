@@ -8,6 +8,7 @@
         <el-form-item label="内容" prop="content">
           <div class="local-quill-editor">
             <quill-editor
+              ref="quill"
               v-model="ruleForm.content"
               :options="editorOption"
               class="editor"
@@ -85,59 +86,34 @@ export default {
   methods: {
     // ———————————————————————————————————————————————————————————————— 弹窗类方法
     async submitForm(form) { // 提交分类
+      await this.$refs.ruleForm.validate()
       if (form.id) {
         // 编辑
         // 表单验证
-        this.$refs.ruleForm.validate(async(valid) => {
-          if (valid) {
-            // 解析出form中的内容
-            this.newForm = { ...form }
-            this.newForm.content = form.content.replace(/<[^>]+>/g, '')
-            // 调用接口编辑
-            await changePageList(this.newForm)
-            // 刷新数据
-            this.$emit('update')
-            // 提示用户修改完成
-            this.$message.success('修改成功')
-            // 关闭弹窗
-            this.closeFn()
-          } else {
-            console.log('error submit!!')
-            // 重置表单
-            this.$refs.ruleForm.resetFields()
-            this.$message({
-              message: '请输入正确',
-              type: 'warning'
-            })
-            return false
-          }
-        })
+        // 解析出form中的内容
+        this.newForm = { ...form }
+        this.newForm.content = form.content.replace(/<[^>]+>/g, '')
+        // 调用接口编辑
+        await changePageList(this.newForm)
+        // 刷新数据
+        this.$emit('update')
+        // 提示用户修改完成
+        this.$message.success('修改成功')
+        // 关闭弹窗
+        this.closeFn()
       } else {
         // 添加功能
         // 表单验证
-        this.$refs.ruleForm.validate(async(valid) => {
-          if (valid) {
-            this.newForm = { ...form }
-            this.newForm.content = form.content.replace(/<[^>]+>/g, '')
-            // 调用接口添加
-            await addPageList(this.newForm)
-            // 刷新数据
-            this.$emit('update')
-            // 提示用户添加完成
-            this.$message.success('添加成功')
-            // 关闭弹窗
-            this.closeFn()
-          } else {
-            console.log('error submit!!')
-            // 重置表单
-            this.$refs.ruleForm.resetFields()
-            this.$message({
-              message: '请输入正确',
-              type: 'warning'
-            })
-            return false
-          }
-        })
+        this.newForm = { ...form }
+        this.newForm.content = form.content.replace(/<[^>]+>/g, '')
+        // 调用接口添加
+        await addPageList(this.newForm)
+        // 刷新数据
+        this.$emit('update')
+        // 提示用户添加完成
+        this.$message.success('添加成功')
+        // 关闭弹窗
+        this.closeFn()
       }
     },
     closeFn() { // 关闭弹窗

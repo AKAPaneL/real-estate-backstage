@@ -30,7 +30,7 @@
           layout="prev, pager, next"
           :total="total"
           :page-size="2"
-          :current-page="page"
+          :current-page.sync="page"
           @current-change="pageChange"
         />
       </div>
@@ -85,6 +85,7 @@ export default {
         this.total = categoryCount
       } else {
         const { _limit, _start } = this.parameter
+        this._start = (this.page - 1) * 2
         const res = await getCategory({ _limit, _start })
         this.form = res
         const categoryCount = await getCategoryCount('')
@@ -133,7 +134,10 @@ export default {
       this.total -= 1
       // 重新渲染页面,刷新之前要判断是否为最后一个数据
       if (this.form.length === 1) {
+        this.page -= 1
         this.pageChange(this.page)
+      } else {
+        this.getPageList()
       }
     }
   }
@@ -163,5 +167,8 @@ export default {
 
 .block {
   text-align: center;
+  margin-top: 30px;
+  padding-top: 10px;
+  border-top: 1px solid #DCDCDC;
 }
 </style>
