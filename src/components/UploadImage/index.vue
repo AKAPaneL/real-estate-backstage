@@ -7,7 +7,7 @@
       :on-preview="preview"
       :on-remove="remove"
       :limit="1"
-      :file-list="imageUrl ? fileList : []"
+      :file-list="imageUrl ? [{ url: `${imageUrl}` }] : []"
       :http-request="customUpload"
     >
       <i class="el-icon-plus" />
@@ -38,25 +38,25 @@ export default {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
-      fileList: [{ url: `${this.imageUrl}` }]
+      fileList: [{}]
     }
   },
-  watch: {
-    imageUrl(value) {
-      if (value) {
-        this.fileList[0].url = value
-      }
-    }
-  },
+  // watch: {
+  //   imageUrl(value) {
+  //     if (value) {
+  //       this.fileList[0].url = value
+  //     }
+  //   }
+  // },
   methods: {
     preview() {
-      this.dialogImageUrl = this.fileList[0].url
+      this.dialogImageUrl = this.imageUrl
       console.log(this.dialogImageUrl)
       this.dialogVisible = true
     },
     remove() {
       this.fileList = []
-      this.$refs.imageUp.clearFiles()
+      this.$emit('delete')
     },
 
     // 上传图片至腾讯云
@@ -76,7 +76,11 @@ export default {
         } else {
           console.log('上传成功')
           this.fileList = [{ url: `http://${data.Location}` }]
-          this.$emit('image', this.fileList[0].url)
+          if (this.fileList) {
+            this.$emit('image', this.fileList[0].url)
+          } else {
+            this.$emit('image', 'https://fd.co188.com/group1/M04/5D/96/rBBhH11H-H6AMoWYAB5mkmBK0Fc405.jpg')
+          }
         }
       })
     }
