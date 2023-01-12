@@ -53,7 +53,7 @@
           />
           <el-table-column label="操作" width="172px">
             <template #default="{row}">
-              <el-button type="primary">编辑</el-button>
+              <el-button type="primary" @click="editor(row.id)">编辑</el-button>
               <el-button type="danger" @click="deleteClient(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -74,7 +74,7 @@
   </div>
 </template>
 <script>
-import { getClientsList, getClientsCount, deleteClient } from '@/api/clients'
+import { getClientsList, getClientsCount, deleteClient, getSingleClient } from '@/api/clients'
 import formDialog from './components/form-dialog.vue'
 import ClientHead from '@/assets/common/client-head.jpeg'
 // 根据数据获取 单个 经济 的id和name 列表
@@ -216,6 +216,11 @@ export default {
       this.currentPage = 1
       this.loadClientsList()
       this.loadClientsCount()
+    },
+    async editor(id) {
+      this.visible = true
+      const res = await getSingleClient(id)
+      this.$refs.formDialog.editor(res)
     },
     // 关闭表单的方法
     closeForm() {

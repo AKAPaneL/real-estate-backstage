@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="添加客户" :visible="visible" @close="$emit('close')">
+    <el-dialog :title="form.id?'编辑客户信息':'新增客户'" :visible="visible" @close="$emit('close')">
       <el-form ref="form" :model="form" :rules="rules">
         <el-form-item label="姓名" label-width="50px" prop="name">
           <el-input v-model="form.name" autocomplete="off" />
@@ -36,7 +36,7 @@
 <script>
 import ImageUpload from './imageUpload.vue'
 import { getAllAgentsList } from '@/api/agents'
-import { addClient } from '@/api/clients'
+import { addClient, editorClient } from '@/api/clients'
 import ClientHead from '@/assets/common/client-head.jpeg'
 export default {
   components: {
@@ -49,6 +49,7 @@ export default {
   },
   data() {
     return {
+      imageUrl: '',
       form: {
         name: '',
         agent: '',
@@ -83,6 +84,7 @@ export default {
     }
   },
   created() {
+    this.getAgentsList()
   },
   methods: {
     // 获取所有经济列表
@@ -97,9 +99,17 @@ export default {
     async subForm() {
       // 表单验证
       await this.$refs.form.validate()
-      // 验证成功调用接口
-      await addClient(this.form)
-      this.$message.success('添加成功')
+
+      // 判断是否有id
+      if (this.form.id) {
+        // 这里面调用编辑接口
+        await editorClient(this.form)
+        this.$message.success('修改成功')
+      } else {
+        // 验证成功  调用新增接口
+        await addClient(this.form)
+        this.$message.success('添加成功')
+      }
       // 告诉父组件  刷新页面
       this.$emit('refresh')
       // 关闭窗口
@@ -118,6 +128,12 @@ export default {
         image: ClientHead
       }
       this.$refs.upload.remove()
+    },
+    // 数据回填的方法
+    editor(res) {
+      res.agent = res.agent.id
+      this.form = res
+      this.$refs.upload.backImage(res.image)
     }
   }
 }
