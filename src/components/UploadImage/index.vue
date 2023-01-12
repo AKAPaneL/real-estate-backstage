@@ -38,7 +38,8 @@ export default {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
-      fileList: [{}]
+      fileList: [{}],
+      listUrl: 'https://fd.co188.com/group1/M04/5D/96/rBBhH11H-H6AMoWYAB5mkmBK0Fc405.jpg'
     }
   },
   // watch: {
@@ -56,7 +57,8 @@ export default {
     },
     remove() {
       this.fileList = []
-      this.$emit('delete')
+      this.$emit('delete', this.listUrl)
+      this.$refs.imageUp.clearFiles()
     },
 
     // 上传图片至腾讯云
@@ -76,11 +78,7 @@ export default {
         } else {
           console.log('上传成功')
           this.fileList = [{ url: `http://${data.Location}` }]
-          if (this.fileList) {
-            this.$emit('image', this.fileList[0].url)
-          } else {
-            this.$emit('image', 'https://fd.co188.com/group1/M04/5D/96/rBBhH11H-H6AMoWYAB5mkmBK0Fc405.jpg')
-          }
+          this.$emit('image', this.fileList[0].url)
         }
       })
     }

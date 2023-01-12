@@ -42,41 +42,83 @@ export default {
         ]
       },
       imageUrl: '',
-      defaultImg: ''
+      defaultImg: '',
+      newForm: {}
     }
   },
   methods: {
     // ———————————————————————————————————————————————————————————————— 弹窗类方法
     async submitForm(form) { // 提交分类
       if (form.id) {
-        form.image = this.defaultImg
         // 编辑
-        await changeCategory(form)
-        this.$emit('update')
-        // 提示用户修改完成
-        this.$message.success('修改成功')
+        this.$refs.ruleForm.validate(async (valid) => {
+          if (valid) {
+            this.newForm = { ...form }
+            if (this.defaultImg) {
+              this.newForm.image = this.imageUrl ? this.imageUrl : this.defaultImg
+            }
+            if (!this.newForm.image) {
+              this.newForm.image = 'https://fd.co188.com/group1/M04/5D/96/rBBhH11H-H6AMoWYAB5mkmBK0Fc405.jpg'
+            }
+            this.defaultImg = ''
+            this.imageUrl = ''
+            await changeCategory(this.newForm)
+            // this.defaultImg = ''
+            this.$emit('update')
+            // 提示用户修改完成
+            this.$message.success('修改成功')
+            this.closeFn()
+          } else {
+            console.log('error submit!!')
+            // 重置表单
+            this.$refs.ruleForm.resetFields()
+            this.$message({
+              message: '请输入正确',
+              type: 'warning'
+            })
+            return false
+          }
+        })
       } else {
         // 添加
-        form.image = this.imageUrl ? this.imageUrl : 'https://fd.co188.com/group1/M04/5D/96/rBBhH11H-H6AMoWYAB5mkmBK0Fc405.jpg'
-        await addCategory(form)
-        this.$refs.ruleForm.resetFields()
-        this.ruleForm.image = ''
-        this.$emit('update')
-        // 提示用户添加完成
-        this.$message.success('添加成功')
+        this.$refs.ruleForm.validate(async (valid) => {
+          if (valid) {
+            form.image = this.imageUrl ? this.imageUrl : 'https://fd.co188.com/group1/M04/5D/96/rBBhH11H-H6AMoWYAB5mkmBK0Fc405.jpg'
+            // 调用接口添加
+            await addCategory(form)
+            // 重置表单
+            this.$refs.ruleForm.resetFields()
+            this.ruleForm.image = ''
+            // 更新数据
+            this.$emit('update')
+            // 提示用户添加完成
+            this.$message.success('添加成功')
+            // 关闭弹窗
+            this.closeFn()
+          } else {
+            console.log('error submit!!')
+            // 重置表单
+            this.$refs.ruleForm.resetFields()
+            this.$message({
+              message: '请输入正确',
+              type: 'warning'
+            })
+            return false
+          }
+        })
       }
-      // 关闭弹窗
-      this.$emit('closeDia')
     },
     closeFn() { // 关闭弹窗
+      this.$refs.ruleForm.resetFields()
       this.$emit('closeDia')
     },
     UploadImage(url) { // 接收腾讯云链接
       this.imageUrl = url
     },
-    deleteImg() {
-      console.log(1111)
-      this.defaultImg = 'https://fd.co188.com/group1/M04/5D/96/rBBhH11H-H6AMoWYAB5mkmBK0Fc405.jpg'
+    deleteImg(url) {
+      this.defaultImg = url
+      console.log(url)
+      this.newForm.image = ''
     }
   }
 }

@@ -7,8 +7,12 @@
         </el-form-item>
         <el-form-item label="内容" prop="content">
           <div class="local-quill-editor">
-            <quill-editor v-model="ruleForm.content" :options="editorOption" class="editor"
-              @blur="$refs.ruleForm.validateField('content')" />
+            <quill-editor
+              v-model="ruleForm.content"
+              :options="editorOption"
+              class="editor"
+              @blur="$refs.ruleForm.validateField('content')"
+            />
           </div>
         </el-form-item>
         <el-form-item class="button-style">
@@ -20,7 +24,7 @@
   </div>
 </template>
 <script>
-import { addPageList, changeCategory } from '@/api/pagesList'
+import { addPageList, changePageList } from '@/api/pagesList'
 // 富文本配置↓
 const toolbarOptions = [
   // 字体大小-----[{ size: ['small', false, 'large', 'huge'] }]
@@ -83,33 +87,60 @@ export default {
     async submitForm(form) { // 提交分类
       if (form.id) {
         // 编辑
-        console.log(12312312321)
-        this.$emit('update')
-        // 提示用户修改完成
-        this.$message.success('修改成功')
-      } else {
-        this.$refs.ruleForm.validate((valid) => {
+        // 表单验证
+        this.$refs.ruleForm.validate(async(valid) => {
           if (valid) {
-            console.log(1111)
+            // 解析出form中的内容
+            this.newForm = { ...form }
+            this.newForm.content = form.content.replace(/<[^>]+>/g, '')
+            // 调用接口编辑
+            await changePageList(this.newForm)
+            // 刷新数据
+            this.$emit('update')
+            // 提示用户修改完成
+            this.$message.success('修改成功')
+            // 关闭弹窗
+            this.closeFn()
           } else {
             console.log('error submit!!')
+            // 重置表单
+            this.$refs.ruleForm.resetFields()
+            this.$message({
+              message: '请输入正确',
+              type: 'warning'
+            })
             return false
           }
         })
-        // 添加
-        // this.newForm = { ...form }
-        // this.newForm.content = form.content.replace(/<[^>]+>/g, '')
-        // // 调用接口添加
-        // await addPageList(this.newForm)
-        // // 更新刷新数据
-        // this.$emit('update')
-        // // 提示用户添加完成
-        // this.$message.success('添加成功')
+      } else {
+        // 添加功能
+        // 表单验证
+        this.$refs.ruleForm.validate(async(valid) => {
+          if (valid) {
+            this.newForm = { ...form }
+            this.newForm.content = form.content.replace(/<[^>]+>/g, '')
+            // 调用接口添加
+            await addPageList(this.newForm)
+            // 刷新数据
+            this.$emit('update')
+            // 提示用户添加完成
+            this.$message.success('添加成功')
+            // 重置表单
+            this.$refs.ruleForm.resetFields()
+            // 关闭弹窗
+            this.$emit('closeDia')
+          } else {
+            console.log('error submit!!')
+            // 重置表单
+            this.$refs.ruleForm.resetFields()
+            this.$message({
+              message: '请输入正确',
+              type: 'warning'
+            })
+            return false
+          }
+        })
       }
-      // 重置表单验证
-      // this.$refs.ruleForm.resetFields()
-      // 关闭弹窗
-      // this.$emit('closeDia')
     },
     closeFn() { // 关闭弹窗
       this.$refs.ruleForm.resetFields()
