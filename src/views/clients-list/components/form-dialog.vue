@@ -131,8 +131,13 @@ export default {
     },
     // 数据回填的方法
     editor(res) {
-      res.agent = res.agent.id
-      this.form = res
+      console.log(res)
+      if (res.agent) {
+        this.form = res
+      } else {
+        this.form = res
+        this.form.agent = undefined
+      }
       this.$refs.upload.backImage(res.image)
     }
   }
