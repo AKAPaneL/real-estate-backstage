@@ -3,7 +3,7 @@
     <div class="app-container">
       <page-tools>
         <template #after>
-          <el-button type="primary">添加角色</el-button>
+          <el-button type="primary" @click="showRoleDialog = true">添加角色</el-button>
         </template>
       </page-tools>
 
@@ -28,7 +28,23 @@
         </el-table-column>
       </el-table>
     </div>
-  </div>
+    <el-dialog title="新增角色" :visible.sync="showRoleDialog">
+      <el-form>
+        <el-form-item label="角色名称">
+          <el-input />
+        </el-form-item>
+        <el-form-item label="角色描述">
+          <el-input />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          <el-button @click="dialogVisible = false">取 消</el-button>
+        </div>
+      </template>
+      <el-dialog />
+    </el-dialog></div>
 </template>
 
 <script>
@@ -38,7 +54,8 @@ export default {
     return {
       rolesList: [],
       limit: 2,
-      start: 0
+      start: 0,
+      showRoleDialog: false
     }
   },
   created() {
@@ -70,6 +87,8 @@ export default {
 }
 </script>
 
-  <style>
-
+  <style scoped>
+.dialog-footer {
+  text-align: center
+}
   </style>
