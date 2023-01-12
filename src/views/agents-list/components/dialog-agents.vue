@@ -1,13 +1,30 @@
 <template>
   <div>
-    <el-dialog :title="ruleForm.id ? '编辑分类' : '添加分类'" :visible="visible" @close="closeFn">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-position="left" label-width="80px">
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title" />
+    <el-dialog :title="ruleForm.id ? '编辑经纪' : '添加经纪'" :visible="visible" @close="closeFn">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-position="right" label-width="80px">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="ruleForm.name" />
+        </el-form-item>
+        <el-form-item
+          prop="email"
+          label="邮箱"
+          :rules="[
+            { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          ]"
+        >
+          <el-input v-model="ruleForm.email" />
+        </el-form-item>
+        <el-form-item label="电话" prop="phone">
+          <el-input v-model="ruleForm.phone" />
+        </el-form-item>
+        <el-form-item label="地址" prop="address">
+          <el-input v-model="ruleForm.address" />
         </el-form-item>
         <el-form-item label="描述" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" :rows="4" resize="none" />
         </el-form-item>
+
         <el-form-item label="封面">
           <upload-image ref="upload" :image-url="ruleForm.image" @image="UploadImage" @delete="deleteImg" />
           <!-- 上传图片组件 -->
@@ -22,7 +39,7 @@
   </div>
 </template>
 <script>
-import { addCategory, changeCategory } from '@/api/category'
+import { addAgents, changeAgents } from '@/api/agents'
 export default {
   props: {
     visible: Boolean,
@@ -34,7 +51,7 @@ export default {
   data() {
     return {
       rules: {
-        title: [
+        name: [
           { required: true, message: '请输入标题', trigger: 'blur' }
         ],
         desc: [
@@ -61,7 +78,7 @@ export default {
         }
         this.defaultImg = ''
         this.imageUrl = ''
-        await changeCategory(this.newForm)
+        await changeAgents(this.newForm)
         // this.defaultImg = ''
         this.$emit('update')
         // 提示用户修改完成
@@ -72,7 +89,7 @@ export default {
         // 添加
         form.image = this.imageUrl ? this.imageUrl : 'https://fd.co188.com/group1/M04/5D/96/rBBhH11H-H6AMoWYAB5mkmBK0Fc405.jpg'
         // 调用接口添加
-        await addCategory(form)
+        await addAgents(form)
         // 重置表单
         this.$refs.ruleForm.resetFields()
         this.ruleForm.image = ''
