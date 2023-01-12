@@ -134,7 +134,7 @@ export default {
         }
         this.pageChange(this.page)
       } else {
-        this.getPageList()
+        this.getCategory()
       }
     }
   }

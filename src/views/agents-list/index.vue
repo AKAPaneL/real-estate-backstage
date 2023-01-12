@@ -141,7 +141,7 @@ export default {
         this.page -= 1
         this.pageChange(this.page)
       } else {
-        this.getPageList()
+        this.getAgents()
       }
     }
   }
