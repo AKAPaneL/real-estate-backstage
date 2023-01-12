@@ -117,7 +117,6 @@ export default {
     },
     deleteImg(url) {
       this.defaultImg = url
-      console.log(url)
       this.newForm.image = ''
     }
   }

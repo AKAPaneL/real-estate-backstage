@@ -7,12 +7,8 @@
         </el-form-item>
         <el-form-item label="内容" prop="content">
           <div class="local-quill-editor">
-            <quill-editor
-              v-model="ruleForm.content"
-              :options="editorOption"
-              class="editor"
-              @blur="$refs.ruleForm.validateField('content')"
-            />
+            <quill-editor v-model="ruleForm.content" :options="editorOption" class="editor"
+              @blur="$refs.ruleForm.validateField('content')" />
           </div>
         </el-form-item>
         <el-form-item class="button-style">
@@ -88,7 +84,7 @@ export default {
       if (form.id) {
         // 编辑
         // 表单验证
-        this.$refs.ruleForm.validate(async(valid) => {
+        this.$refs.ruleForm.validate(async (valid) => {
           if (valid) {
             // 解析出form中的内容
             this.newForm = { ...form }
@@ -115,7 +111,7 @@ export default {
       } else {
         // 添加功能
         // 表单验证
-        this.$refs.ruleForm.validate(async(valid) => {
+        this.$refs.ruleForm.validate(async (valid) => {
           if (valid) {
             this.newForm = { ...form }
             this.newForm.content = form.content.replace(/<[^>]+>/g, '')
@@ -125,10 +121,8 @@ export default {
             this.$emit('update')
             // 提示用户添加完成
             this.$message.success('添加成功')
-            // 重置表单
-            this.$refs.ruleForm.resetFields()
             // 关闭弹窗
-            this.$emit('closeDia')
+            this.closeFn()
           } else {
             console.log('error submit!!')
             // 重置表单

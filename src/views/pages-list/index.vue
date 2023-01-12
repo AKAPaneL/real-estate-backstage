@@ -3,8 +3,8 @@
     <el-card class="box-card">
       <div class="header">
         <span><el-button type="primary" size="small" @click="visible = true">
-          添加页面
-        </el-button></span>
+            添加页面
+          </el-button></span>
         <span class="search-class">
           <el-input v-model="contains" placeholder="请输入关键字">
             <el-button slot="append" @click="searchBtn">筛选</el-button>
@@ -16,18 +16,13 @@
         <el-table-column label="操作">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="theEditor(row.id)">编辑</el-button>
-            <el-button type="danger" size="small" @click="deleteCategory(row.id)">删除</el-button>
+            <el-button type="danger" size="small" @click="deletePageList(row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <div class="block">
-        <el-pagination
-          layout="prev, pager, next"
-          :total="total"
-          :page-size="2"
-          :current-page="page"
-          @current-change="pageChange"
-        />
+        <el-pagination layout="prev, pager, next" :total="total" :page-size="2" :current-page="page"
+          @current-change="pageChange" />
       </div>
       <dialogCate :visible.sync="visible" :rule-form="ruleForm" @closeDia="closeDia" @update="getPageList" />
     </el-card>
@@ -37,7 +32,7 @@
 </template>
 
 <script>
-import { getPageList, getPageListCount, checkPageList } from '@/api/pagesList'
+import { getPageList, getPageListCount, checkPageList, deletePageList } from '@/api/pagesList'
 import dialogCate from './components/dialog-page.vue'
 export default {
   components: {
@@ -115,13 +110,23 @@ export default {
       console.log(this.ruleForm)
     },
     // —————————————————————————————————————————————————————————————————删除
-    async deleteCategory(id) {
+    async deletePageList(id) {
       await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
-      this.getPageList()
+      // 如果点击确认,调用删除接口
+      await deletePageList(id)
+      // 删除成功后提示用户
+      this.$message.success('删除成功')
+      this.total -= 1
+      // 重新渲染页面,刷新之前要判断是否为最后一个数据
+      if (this.form.length === 1) {
+        this.pageChange(this.page)
+      } else {
+        this.getPageList()
+      }
     }
   }
 }

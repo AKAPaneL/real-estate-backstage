@@ -3,8 +3,8 @@
     <el-card class="box-card">
       <div class="header">
         <span><el-button type="primary" size="small" @click="visible = true">
-          添加分类
-        </el-button></span>
+            添加分类
+          </el-button></span>
         <span class="search-class">
           <el-input v-model="contains" placeholder="请输入内容">
             <el-button slot="append" icon="el-icon-search" @click="searchBtn" />
@@ -26,13 +26,8 @@
         </el-table-column>
       </el-table>
       <div class="block">
-        <el-pagination
-          layout="prev, pager, next"
-          :total="total"
-          :page-size="2"
-          :current-page="page"
-          @current-change="pageChange"
-        />
+        <el-pagination layout="prev, pager, next" :total="total" :page-size="2" :current-page="page"
+          @current-change="pageChange" />
       </div>
       <dialogCate :visible.sync="visible" :rule-form="ruleForm" @closeDia="closeDia" @update="getCategory" />
     </el-card>
@@ -118,7 +113,6 @@ export default {
       this.visible = true
       const res = await checkCategory(id)
       this.ruleForm = res
-      console.log(this.ruleForm)
     },
     // —————————————————————————————————————————————————————————————————删除
     async deleteCategory(id) {
@@ -127,8 +121,15 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
+      // 如果点击确认,调用删除接口
       await delCategory(id)
-      this.getCategory()
+      // 删除成功后提示用户
+      this.$message.success('删除成功')
+      this.total -= 1
+      // 重新渲染页面,刷新之前要判断是否为最后一个数据
+      if (this.form.length === 1) {
+        this.pageChange(this.page)
+      }
     }
   }
 }

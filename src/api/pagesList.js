@@ -23,7 +23,12 @@ export function checkPageList(id) {
   return request.get(`/pages/${id}`)
 }
 
-// 更新分类数据
+// 更新页面数据
 export function changePageList(data) {
   return request.put(`/pages/${data.id}`, data)
+}
+
+// 删除页面数据
+export function deletePageList(id) {
+  return request.delete(`/pages/${id}`)
 }
