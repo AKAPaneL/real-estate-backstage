@@ -22,3 +22,8 @@ export function addPageList(data) {
 export function checkPageList(id) {
     return request.get(`/pages/${id}`)
 }
+
+// 更新分类数据
+export function changePageList(data) {
+    return request.put(`/pages/${data.id}`, data)
+}
