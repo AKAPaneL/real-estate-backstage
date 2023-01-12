@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { getPageList, getPageListCount } from '@/api/pagesList'
+import { getPageList, getPageListCount, checkPageList } from '@/api/pagesList'
 import dialogCate from './components/dialog-page.vue'
 export default {
   components: {
@@ -104,7 +104,8 @@ export default {
     // —————————————————————————————————————————————————————————————————编辑
     async theEditor(id) {
       this.visible = true
-      const res = await checkCategory(id)
+      const res = await checkPageList(id)
+      console.log(res)
       this.ruleForm = res
       console.log(this.ruleForm)
     },
@@ -115,7 +116,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
-      await delCategory(id)
       this.getPageList()
     }
   }
