@@ -68,7 +68,7 @@
           :current-page.sync="currentPage"
           @current-change="loadClientsList"
         />
-        <form-dialog :visible="visible" @close="visible=false" />
+        <form-dialog :visible="visible" @close="visible=false" @refresh="refresh" />
       </div>
     </el-card>
   </div>
@@ -205,15 +205,22 @@ export default {
       if (this.clientsList.length === 1) {
         this.currentPage -= 1
         this.loadClientsList()
+        this.loadAgentList()
       } else {
         this.loadClientsList()
+        this.loadAgentList()
       }
     },
     // 通过经纪人获取列表
     async getClientsListByAgent() {
-      this.start = 0
+      this.currentPage = 1
       this.loadClientsList()
       this.loadClientsCount()
+    },
+    refresh() {
+      this.loadClientsCount()
+      this.loadClientsList()
+      this.loadAgentList()
     }
   }
 }
