@@ -3,8 +3,8 @@
     <el-card class="box-card">
       <div class="header">
         <span><el-button type="primary" size="small" @click="visible = true">
-            添加页面
-          </el-button></span>
+          添加页面
+        </el-button></span>
         <span class="search-class">
           <el-input v-model="contains" placeholder="请输入关键字">
             <el-button slot="append" @click="searchBtn">筛选</el-button>
@@ -21,8 +21,13 @@
         </el-table-column>
       </el-table>
       <div class="block">
-        <el-pagination layout="prev, pager, next" :total="total" :page-size="2" :current-page="page"
-          @current-change="pageChange" />
+        <el-pagination
+          layout="prev, pager, next"
+          :total="total"
+          :page-size="2"
+          :current-page="page"
+          @current-change="pageChange"
+        />
       </div>
       <dialogCate :visible.sync="visible" :rule-form="ruleForm" @closeDia="closeDia" @update="getPageList" />
     </el-card>
