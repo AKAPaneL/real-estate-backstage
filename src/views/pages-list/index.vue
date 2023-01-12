@@ -9,7 +9,6 @@
           <el-input v-model="contains" placeholder="请输入关键字">
             <el-button slot="append" @click="searchBtn">筛选</el-button>
           </el-input></span>
-        </span>
       </div>
       <el-table :data="form" border style="width: 100%">
         <el-table-column prop="title" label="标题" />
