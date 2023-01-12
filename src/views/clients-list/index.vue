@@ -203,7 +203,9 @@ export default {
       this.total -= 1
       // 重新刷新页面 刷新之前要判断 是否是最后一个数据
       if (this.clientsList.length === 1) {
-        this.currentPage -= 1
+        if (this.currentPage > 1) {
+          this.currentPage -= 1
+        }
         this.loadClientsList()
         this.loadAgentList()
       } else {
