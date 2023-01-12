@@ -5,6 +5,7 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 // import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
+import { constantRoutes, asyncRoutes } from '@/router/index'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -25,11 +26,40 @@ router.beforeEach(async(to, from, next) => {
     if (store.getters.token) {
       if (!store.state.user.userInfo) {
         await store.dispatch('user/getUser')
+
+        const { menus } = store.state.user.permission
+        const routes = []
+        // 找到符合权限列表 对应的 路由名字
+        menus.forEach(item => {
+          const route = asyncRoutes.find(obj => obj.name === item.substr(3))
+          if (route) {
+            routes.push(route)
+          }
+        })
+        // 动态添加路由
+        console.log(routes)
+        router.options.routes = [...constantRoutes, ...routes]
+        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }])
+        next()
+      } else if (from.path === '/login') {
+        // 如果来自登录页  有token  有user  也要获取权限
+        const { menus } = store.state.user.permission
+        const routes = []
+        // 找到符合权限列表 对应的 路由名字
+        menus.forEach(item => {
+          const route = asyncRoutes.find(obj => obj.name === item.substr(3))
+          if (route) {
+            routes.push(route)
+          }
+        })
+        // 动态添加路由
+        console.log(routes)
+        router.options.routes = [...constantRoutes, ...routes]
+        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }])
         next()
       } else {
         next()
       }
-      // const permission = store.state.user.permission
     } else {
       next('/login')
     }
