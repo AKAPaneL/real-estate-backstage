@@ -7,7 +7,7 @@ export default {
   children: [
     {
       path: '',
-      component: () => import('@/views/roles-list'),
+      component: () => import('@/views/rolesList'),
       meta: {
         title: '角色管理',
         icon: 'tree'
