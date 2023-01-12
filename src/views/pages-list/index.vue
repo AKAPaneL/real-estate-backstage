@@ -3,21 +3,16 @@
     <el-card class="box-card">
       <div class="header">
         <span><el-button type="primary" size="small" @click="visible = true">
-          添加分类
+          添加页面
         </el-button></span>
         <span class="search-class">
-          <el-input v-model="contains" placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search" @click="searchBtn" />
+          <el-input v-model="contains" placeholder="请输入关键字">
+            <el-button slot="append" @click="searchBtn">筛选</el-button>
           </el-input></span>
       </div>
       <el-table :data="form" border style="width: 100%">
-        <el-table-column prop="row" label="图片">
-          <template #default="{ row }">
-            <img :src="row.image" alt="" class="avatar">
-          </template>
-        </el-table-column>
         <el-table-column prop="title" label="标题" />
-        <el-table-column prop="desc" label="介绍" />
+        <el-table-column prop="content" label="内容" />
         <el-table-column label="操作">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="theEditor(row.id)">编辑</el-button>
@@ -34,7 +29,7 @@
           @current-change="pageChange"
         />
       </div>
-      <dialogCate :visible.sync="visible" :rule-form="ruleForm" @closeDia="closeDia" @update="getCategory" />
+      <dialogCate :visible.sync="visible" :rule-form="ruleForm" @closeDia="closeDia" @update="getPageList" />
     </el-card>
 
   </div>
@@ -42,8 +37,8 @@
 </template>
 
 <script>
-import { getCategory, getCategoryCount, checkCategory, delCategory } from '@/api/category'
-import dialogCate from './components/dialog-cate.vue'
+import { getPageList, getPageListCount, checkPageList } from '@/api/pagesList'
+import dialogCate from './components/dialog-page.vue'
 export default {
   components: {
     dialogCate
@@ -66,34 +61,33 @@ export default {
       ruleForm: {
         id: '',
         title: '',
-        desc: '',
-        image: ''
+        content: ''
       }
     }
   },
   created() {
-    this.getCategory()
+    this.getPageList()
   },
   methods: {
     // 获取数据渲染页面
-    async getCategory() {
+    async getPageList() {
       if (this.parameter.title_contains) {
         console.log(111)
-        const res = await getCategory(this.parameter)
+        const res = await getPageList(this.parameter)
         this.form = res
-        const categoryCount = await getCategoryCount(this.parameter.title_contains)
+        const categoryCount = await getPageListCount(this.parameter.title_contains)
         this.total = categoryCount
       } else {
         const { _limit, _start } = this.parameter
-        const res = await getCategory({ _limit, _start })
+        const res = await getPageList({ _limit, _start })
         this.form = res
-        const categoryCount = await getCategoryCount('')
+        const categoryCount = await getPageListCount('')
         this.total = categoryCount
       }
     },
     pageChange(page) { // 分页跳转
       this.parameter._start = (page - 1) * 2
-      this.getCategory()
+      this.getPageList()
     },
     // 关闭弹窗，清空表单
     closeDia() {
@@ -101,22 +95,22 @@ export default {
       this.ruleForm = {
         id: '',
         title: '',
-        desc: '',
-        image: ''
+        content: ''
       }
     },
     // —————————————————————————————————————————————————————————————————搜索
     async searchBtn() {
       this.parameter.title_contains = this.contains
       this.parameter._start = 0
-      const res = await getCategory(this.parameter)
+      const res = await getPageList(this.parameter)
       this.form = res
-      this.getCategory()
+      this.getPageList()
     },
     // —————————————————————————————————————————————————————————————————编辑
     async theEditor(id) {
       this.visible = true
-      const res = await checkCategory(id)
+      const res = await checkPageList(id)
+      console.log(res)
       this.ruleForm = res
       console.log(this.ruleForm)
     },
@@ -127,8 +121,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
-      await delCategory(id)
-      this.getCategory()
+      this.getPageList()
     }
   }
 }
