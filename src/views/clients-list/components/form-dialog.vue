@@ -131,7 +131,6 @@ export default {
     },
     // 数据回填的方法
     editor(res) {
-      console.log(res)
       if (res.agent) {
         this.form = res
       } else {
