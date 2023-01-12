@@ -17,3 +17,8 @@ export function getPageListCount(data) {
 export function addPageList(data) {
     return request.post('/pages', data)
 }
+
+// 根据id获取详细
+export function checkPageList(id) {
+    return request.get(`/pages/${id}`)
+}
