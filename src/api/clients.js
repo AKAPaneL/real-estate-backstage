@@ -15,7 +15,10 @@ export function getClientsCount(params) {
   }
   return request.get('/clients/count')
 }
-
+// 获取指定客户
+export function getSingleClient(id) {
+  return request.get(`/clients/${id}`)
+}
 // 删除客户信息
 export function deleteClient(id) {
   return request.delete(`/clients/${id}`)
@@ -24,4 +27,9 @@ export function deleteClient(id) {
 // 添加 客户 接口
 export function addClient(data) {
   return request.post('/clients', data)
+}
+
+// 编辑接口
+export function editorClient(data) {
+  return request.put(`/clients/${data.id}`, data)
 }

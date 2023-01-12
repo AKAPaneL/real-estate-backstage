@@ -63,6 +63,11 @@ export default {
     },
     onChange(file, fileList) {
       this.fileList = fileList
+    },
+    // 图片的回填
+    backImage(url) {
+      this.fileList.push({})
+      this.fileList[0].url = url
     }
   }
 }
