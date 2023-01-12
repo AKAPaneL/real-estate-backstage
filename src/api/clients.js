@@ -20,3 +20,8 @@ export function getClientsCount(params) {
 export function deleteClient(id) {
   return request.delete(`/clients/${id}`)
 }
+
+// 添加 客户 接口
+export function addClient(data) {
+  return request.post('/clients', data)
+}

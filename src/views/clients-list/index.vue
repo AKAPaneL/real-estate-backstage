@@ -68,7 +68,7 @@
           :current-page.sync="currentPage"
           @current-change="loadClientsList"
         />
-        <form-dialog :visible="visible" @close="visible=false" />
+        <form-dialog ref="formDialog" :visible="visible" @close="closeForm" @refresh="refresh" />
       </div>
     </el-card>
   </div>
@@ -205,15 +205,30 @@ export default {
       if (this.clientsList.length === 1) {
         this.currentPage -= 1
         this.loadClientsList()
+        this.loadAgentList()
       } else {
         this.loadClientsList()
+        this.loadAgentList()
       }
     },
     // 通过经纪人获取列表
     async getClientsListByAgent() {
-      this.start = 0
+      this.currentPage = 1
       this.loadClientsList()
       this.loadClientsCount()
+    },
+    // 关闭表单的方法
+    closeForm() {
+      // 关闭表单
+      this.visible = false
+      // 调用内部的接口 清理表单
+      this.$refs.formDialog.resetForm()
+    },
+    // 修改数据之后的刷新
+    refresh() {
+      this.loadClientsCount()
+      this.loadClientsList()
+      this.loadAgentList()
     }
   }
 }

@@ -1,13 +1,15 @@
 <template>
   <div>
     <el-upload
+      :class="{disable:fileList.length>0}"
       action="#"
       list-type="picture-card"
       :on-preview="preview"
       :on-remove="remove"
       :limit="1"
       :http-request="customUpload"
-      :file-list="flieList"
+      :file-list="fileList"
+      :on-change="onChange"
     >
       <i class="el-icon-plus" />
     </el-upload>
@@ -28,16 +30,16 @@ export default {
     return {
       visible: false,
       imageUrl: '',
-      flieList: []
+      fileList: []
     }
   },
   methods: {
-    preview(file) {
+    preview() {
       this.visible = true
-      this.imageUrl = file.url
+      this.imageUrl = this.fileList[0].url
     },
-    remove() {
-
+    remove(file, fileList) {
+      this.fileList = []
     },
     customUpload({ file }) {
       cos.uploadFile({
@@ -51,17 +53,22 @@ export default {
         }
       }, (err, data) => {
         if (err) {
-          console.log('上传失败', err)
+          this.$message.error('上传失败')
         } else {
-          console.log('上传成功', this.flieList, data)
           this.$message.success('上传成功')
-          this.flieList.push({ url: `http://${data.Location}` })
+          this.fileList[0].url = `http://${data.Location}`
+          this.$emit('upImageSuccess', `http://${data.Location}`)
         }
       })
+    },
+    onChange(file, fileList) {
+      this.fileList = fileList
     }
   }
 }
 </script>
-<style>
-
+<style scoped>
+  ::v-deep .disable .el-upload{
+    display: none;
+  }
 </style>
