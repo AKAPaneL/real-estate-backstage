@@ -3,8 +3,8 @@
     <el-card class="box-card">
       <div class="header">
         <span><el-button type="primary" size="small" @click="visible = true">
-          添加分类
-        </el-button></span>
+            添加分类
+          </el-button></span>
         <span class="search-class">
           <el-input v-model="contains" placeholder="请输入内容">
             <el-button slot="append" icon="el-icon-search" @click="searchBtn" />
@@ -26,15 +26,10 @@
         </el-table-column>
       </el-table>
       <div class="block">
-        <el-pagination
-          layout="prev, pager, next"
-          :total="total"
-          :page-size="2"
-          :current-page.sync="page"
-          @current-change="pageChange"
-        />
+        <el-pagination layout="prev, pager, next" :total="total" :page-size="2" :current-page.sync="page"
+          @current-change="pageChange" />
       </div>
-      <dialogCate :visible.sync="visible" :rule-form="ruleForm" @closeDia="closeDia" @update="getCategory" />
+      <dialogCate ref="formDialog" :visible="visible" @close="closeDia" @update="getCategory" />
     </el-card>
 
   </div>
@@ -61,8 +56,6 @@ export default {
       },
       // 整体数据form
       form: [],
-      Edimg: '',
-      // 添加或编辑newForm
       ruleForm: {
         id: '',
         title: '',
@@ -98,13 +91,10 @@ export default {
     },
     // 关闭弹窗，清空表单
     closeDia() {
+      // 关闭表单
       this.visible = false
-      this.ruleForm = {
-        id: '',
-        title: '',
-        desc: '',
-        image: ''
-      }
+      // 调用内部方法,清理表单
+      this.$refs.formDialog.resetForm()
     },
     // —————————————————————————————————————————————————————————————————搜索
     async searchBtn() {
@@ -118,7 +108,7 @@ export default {
     async theEditor(id) {
       this.visible = true
       const res = await checkCategory(id)
-      this.ruleForm = res
+      this.$refs.formDialog.editor(res)
     },
     // —————————————————————————————————————————————————————————————————删除
     async deleteCategory(id) {

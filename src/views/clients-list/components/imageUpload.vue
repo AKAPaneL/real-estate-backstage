@@ -1,16 +1,7 @@
 <template>
   <div>
-    <el-upload
-      :class="{disable:fileList.length>0}"
-      action="#"
-      list-type="picture-card"
-      :on-preview="preview"
-      :on-remove="remove"
-      :limit="1"
-      :http-request="customUpload"
-      :file-list="fileList"
-      :on-change="onChange"
-    >
+    <el-upload :class="{ disable: fileList.length > 0 }" action="#" list-type="picture-card" :on-preview="preview"
+      :on-remove="remove" :limit="1" :http-request="customUpload" :file-list="fileList" :on-change="onChange">
       <i class="el-icon-plus" />
     </el-upload>
     <el-dialog :visible.sync="visible" append-to-body>
@@ -48,7 +39,7 @@ export default {
         Key: file.name, /* 存储在桶里的对象键（例如:1.jpg，a/b/test.txt，图片.jpg）支持中文，必须字段 */
         Body: file, // 上传文件对象
         SliceSize: 1024 * 1024 * 5, /* 触发分块上传的阈值，超过5MB使用分块上传，小于5MB使用简单上传。可自行设置，非必须 */
-        onProgress: function(progressData) {
+        onProgress: function (progressData) {
           console.log(JSON.stringify(progressData))
         }
       }, (err, data) => {
@@ -73,7 +64,7 @@ export default {
 }
 </script>
 <style scoped>
-  ::v-deep .disable .el-upload{
-    display: none;
-  }
+::v-deep .disable .el-upload {
+  display: none;
+}
 </style>
