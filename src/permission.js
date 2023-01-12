@@ -29,6 +29,7 @@ router.beforeEach(async(to, from, next) => {
       } else {
         next()
       }
+      // const permission = store.state.user.permission
     } else {
       next('/login')
     }

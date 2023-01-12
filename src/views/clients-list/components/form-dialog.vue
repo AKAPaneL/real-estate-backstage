@@ -69,7 +69,8 @@ export default {
           { required: true, message: '请选择活动区域', trigger: 'change' }
         ],
         email: [
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' }
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
         ],
         phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' }
