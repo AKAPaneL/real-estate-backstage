@@ -37,10 +37,9 @@ router.beforeEach(async(to, from, next) => {
           }
         })
         // 动态添加路由
-        console.log(routes)
         router.options.routes = [...constantRoutes, ...routes]
         router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }])
-        next()
+        next(to.path)
       } else if (from.path === '/login') {
         // 如果来自登录页  有token  有user  也要获取权限
         const { menus } = store.state.user.permission
