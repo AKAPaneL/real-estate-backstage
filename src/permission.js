@@ -28,6 +28,7 @@ router.beforeEach(async(to, from, next) => {
         await store.dispatch('user/getUser')
 
         const { menus } = store.state.user.permission
+        console.log(menus)
         const routes = []
         // 找到符合权限列表 对应的 路由名字
         menus.forEach(item => {
