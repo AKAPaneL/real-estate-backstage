@@ -7,3 +7,13 @@ export function getUsersList(params) {
     params
   })
 }
+
+// 新建用户
+export function createUsers(data) {
+  return request.post('/auth/local/register', data)
+}
+
+// 删除用户
+export function getDelList(id) {
+  return request.delete(`/users/${id}`)
+}
