@@ -4,3 +4,8 @@ import request from '@/utils/request'
 export function getUserPermission() {
   return request.get('/mypermissions')
 }
+
+// 获取权限列表
+export function getPermissionList() {
+  return request.get('/permissions')
+}

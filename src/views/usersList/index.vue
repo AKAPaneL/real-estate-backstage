@@ -13,27 +13,19 @@
       >
         <el-table-column
           label="用户名"
+          prop="username"
         />
         <el-table-column
           label="邮箱"
+          prop="email"
         />
-        <el-table-column
-          label="操作"
-        />
+        <el-table-column label="操作">
+          <template #default>
+            <el-button>编辑</el-button>
+            <el-button type="danger">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
-
-      <!-- <div class="block">
-        <span class="demonstration">共计31条</span>
-        <el-pagination
-          :current-page.sync="currentPage2"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
-          layout="sizes, prev, pager, next"
-          :total="1000"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div> -->
     </div>
   </div>
 </template>
@@ -54,10 +46,10 @@ export default {
   methods: {
     async loadEmployeeList() {
       const res = await getUsersList({
-        limit: this._limit,
-        start: this._start
+        _limit: this.limit,
+        _start: this.start
       })
-      console.log(res)
+      this.usersList = res
     }
   }
 
