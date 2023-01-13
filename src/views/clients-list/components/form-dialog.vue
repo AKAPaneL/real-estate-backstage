@@ -22,7 +22,7 @@
         <el-form-item label="描述" label-width="50px" prop="desc">
           <el-input v-model="form.desc" autocomplete="off" type="textarea" />
         </el-form-item>
-        <el-form-item label="描述" label-width="50px">
+        <el-form-item label="图片" label-width="50px">
           <image-upload ref="upload" @upImageSuccess="updataImage" />
         </el-form-item>
       </el-form>
