@@ -2,7 +2,7 @@ import layout from '@/layout'
 
 export default {
   path: '/propertieslist',
-  name: 'propertieslist',
+  name: 'PropertiesList',
   component: layout,
   children: [
     {
@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/properties-list'),
       meta: {
         title: '房产管理',
-        icon: 'lock'
+        icon: 'example'
       }
     }
   ]

@@ -2,7 +2,7 @@ import layout from '@/layout'
 
 export default {
   path: '/agentslist',
-  name: 'agentslist',
+  name: 'AgentsList',
   component: layout,
   children: [
     {
@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/agents-list'),
       meta: {
         title: '经济人管理',
-        icon: 'lock'
+        icon: 'user'
       }
     }
   ]

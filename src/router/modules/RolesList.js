@@ -2,15 +2,15 @@ import layout from '@/layout'
 
 export default {
   path: '/roleslist',
-  name: 'roleslist',
+  name: 'RolesList',
   component: layout,
   children: [
     {
       path: '',
-      component: () => import('@/views/roles-list'),
+      component: () => import('@/views/rolesList'),
       meta: {
         title: '角色管理',
-        icon: 'lock'
+        icon: 'tree'
       }
     }
   ]

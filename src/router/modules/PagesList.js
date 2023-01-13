@@ -2,7 +2,7 @@ import layout from '@/layout'
 
 export default {
   path: '/pageslist',
-  name: 'pageslist',
+  name: 'PagesList',
   component: layout,
   children: [
     {
@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/pages-list'),
       meta: {
         title: '页面管理',
-        icon: 'lock'
+        icon: 'nested'
       }
     }
   ]

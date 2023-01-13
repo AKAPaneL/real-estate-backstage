@@ -2,7 +2,7 @@ import layout from '@/layout'
 
 export default {
   path: '/permissionlist',
-  name: 'permissionlist',
+  name: 'PermissionList',
   component: layout,
   children: [
     {
@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/permission-list'),
       meta: {
         title: '权限管理',
-        icon: 'lock'
+        icon: 'password'
       }
     }
   ]
