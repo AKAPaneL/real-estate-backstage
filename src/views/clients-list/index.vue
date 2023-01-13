@@ -158,6 +158,7 @@ export default {
     },
     // 获取列表数量  也要判断参数
     async loadClientsCount() {
+      console.log(ClientHead);
       let res = {}
       // 如果没有参数
       if (!(this.name_contains || this.agent !== '全部经纪人')) {

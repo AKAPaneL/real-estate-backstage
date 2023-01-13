@@ -3,8 +3,8 @@
     <el-card class="box-card">
       <div class="header">
         <span><el-button type="primary" size="small" @click="visible = true">
-          添加页面
-        </el-button></span>
+            添加页面
+          </el-button></span>
         <span class="search-class">
           <el-input v-model="contains" placeholder="请输入关键字">
             <el-button slot="append" @click="searchBtn">筛选</el-button>
@@ -16,20 +16,15 @@
         <el-table-column label="操作">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="theEditor(row.id)">编辑</el-button>
-            <el-button type="danger" size="small" @click="deleteCategory(row.id)">删除</el-button>
+            <el-button type="danger" size="small" @click="deletePageList(row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <div class="block">
-        <el-pagination
-          layout="prev, pager, next"
-          :total="total"
-          :page-size="2"
-          :current-page="page"
-          @current-change="pageChange"
-        />
+        <el-pagination layout="prev, pager, next" :total="total" :page-size="2" :current-page.sync="page"
+          @current-change="pageChange" />
       </div>
-      <dialogCate :visible.sync="visible" :rule-form="ruleForm" @closeDia="closeDia" @update="getPageList" />
+      <dialogCate ref="formDialog" :visible.sync="visible" @close="closeDia" @update="getPageList" />
     </el-card>
 
   </div>
@@ -37,7 +32,7 @@
 </template>
 
 <script>
-import { getPageList, getPageListCount, checkPageList } from '@/api/pagesList'
+import { getPageList, getPageListCount, checkPageList, deletePageList } from '@/api/pagesList'
 import dialogCate from './components/dialog-page.vue'
 export default {
   components: {
@@ -55,14 +50,8 @@ export default {
         title_contains: ''
       },
       // 整体数据form
-      form: [],
-      Edimg: '',
-      // 添加或编辑newForm
-      ruleForm: {
-        id: '',
-        title: '',
-        content: ''
-      }
+      form: []
+
     }
   },
   created() {
@@ -72,13 +61,13 @@ export default {
     // 获取数据渲染页面
     async getPageList() {
       if (this.parameter.title_contains) {
-        console.log(111)
         const res = await getPageList(this.parameter)
         this.form = res
         const categoryCount = await getPageListCount(this.parameter.title_contains)
         this.total = categoryCount
       } else {
         const { _limit, _start } = this.parameter
+        this._start = (this.page - 1) * 2
         const res = await getPageList({ _limit, _start })
         this.form = res
         const categoryCount = await getPageListCount('')
@@ -92,11 +81,7 @@ export default {
     // 关闭弹窗，清空表单
     closeDia() {
       this.visible = false
-      this.ruleForm = {
-        id: '',
-        title: '',
-        content: ''
-      }
+      this.$refs.formDialog.resetForm()
     },
     // —————————————————————————————————————————————————————————————————搜索
     async searchBtn() {
@@ -110,18 +95,29 @@ export default {
     async theEditor(id) {
       this.visible = true
       const res = await checkPageList(id)
-      console.log(res)
-      this.ruleForm = res
-      console.log(this.ruleForm)
+      this.$refs.formDialog.editor(res)
     },
     // —————————————————————————————————————————————————————————————————删除
-    async deleteCategory(id) {
+    async deletePageList(id) {
       await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
-      this.getPageList()
+      // 如果点击确认,调用删除接口
+      await deletePageList(id)
+      // 删除成功后提示用户
+      this.$message.success('删除成功')
+      this.total -= 1
+      // 重新渲染页面,刷新之前要判断是否为最后一个数据
+      if (this.form.length === 1) {
+        if (this.page > 1) {
+          this.page -= 1
+        }
+        this.pageChange(this.page)
+      } else {
+        this.getPageList()
+      }
     }
   }
 }
@@ -150,5 +146,8 @@ export default {
 
 .block {
   text-align: center;
+  margin-top: 30px;
+  padding-top: 10px;
+  border-top: 1px solid #DCDCDC;
 }
 </style>

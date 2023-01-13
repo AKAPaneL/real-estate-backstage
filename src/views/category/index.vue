@@ -30,11 +30,11 @@
           layout="prev, pager, next"
           :total="total"
           :page-size="2"
-          :current-page="page"
+          :current-page.sync="page"
           @current-change="pageChange"
         />
       </div>
-      <dialogCate :visible.sync="visible" :rule-form="ruleForm" @closeDia="closeDia" @update="getCategory" />
+      <dialogCate ref="formDialog" :visible="visible" @close="closeDia" @update="getCategory" />
     </el-card>
 
   </div>
@@ -61,8 +61,6 @@ export default {
       },
       // 整体数据form
       form: [],
-      Edimg: '',
-      // 添加或编辑newForm
       ruleForm: {
         id: '',
         title: '',
@@ -78,13 +76,13 @@ export default {
     // 获取数据渲染页面
     async getCategory() {
       if (this.parameter.title_contains) {
-        console.log(111)
         const res = await getCategory(this.parameter)
         this.form = res
         const categoryCount = await getCategoryCount(this.parameter.title_contains)
         this.total = categoryCount
       } else {
         const { _limit, _start } = this.parameter
+        this._start = (this.page - 1) * 2
         const res = await getCategory({ _limit, _start })
         this.form = res
         const categoryCount = await getCategoryCount('')
@@ -97,13 +95,10 @@ export default {
     },
     // 关闭弹窗，清空表单
     closeDia() {
+      // 关闭表单
       this.visible = false
-      this.ruleForm = {
-        id: '',
-        title: '',
-        desc: '',
-        image: ''
-      }
+      // 调用内部方法,清理表单
+      this.$refs.formDialog.resetForm()
     },
     // —————————————————————————————————————————————————————————————————搜索
     async searchBtn() {
@@ -117,8 +112,7 @@ export default {
     async theEditor(id) {
       this.visible = true
       const res = await checkCategory(id)
-      this.ruleForm = res
-      console.log(this.ruleForm)
+      this.$refs.formDialog.editor(res)
     },
     // —————————————————————————————————————————————————————————————————删除
     async deleteCategory(id) {
@@ -127,8 +121,20 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
+      // 如果点击确认,调用删除接口
       await delCategory(id)
-      this.getCategory()
+      // 删除成功后提示用户
+      this.$message.success('删除成功')
+      this.total -= 1
+      // 重新渲染页面,刷新之前要判断是否为最后一个数据
+      if (this.form.length === 1) {
+        if (this.page > 1) {
+          this.page -= 1
+        }
+        this.pageChange(this.page)
+      } else {
+        this.getCategory()
+      }
     }
   }
 }
@@ -157,5 +163,8 @@ export default {
 
 .block {
   text-align: center;
+  margin-top: 30px;
+  padding-top: 10px;
+  border-top: 1px solid #DCDCDC;
 }
 </style>

@@ -2,7 +2,6 @@ import request from '@/utils/request'
 
 // 封装获取分类列表
 export function getCategory(params) {
-  console.log(params)
   return request.get('/categories', { params })
 }
 // 封装获取分类数量
