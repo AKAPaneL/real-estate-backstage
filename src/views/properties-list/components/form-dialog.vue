@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="form.id?'编辑房产':'添加房产'" :visible="visible" @close="$emit('close')">
+    <el-dialog :title="form.id ? '编辑房产' : '添加房产'" :visible="visible" @close="$emit('close')">
       <el-form ref="form" :model="form" :rules="rules">
         <el-form-item label="姓名" label-width="50px" prop="name">
           <el-input v-model="form.name" autocomplete="off" />
@@ -36,7 +36,7 @@
 <script>
 import ImageUpload from './imageUpload.vue'
 import { getAllAgentsList } from '@/api/agents'
-import { addClient, editorClient } from '@/api/clients'
+import { addProperties, editorProperties } from '@/api/properties'
 import ClientHead from '@/assets/common/client-head.jpeg'
 export default {
   components: {
@@ -104,11 +104,11 @@ export default {
       // 判断是否有id
       if (this.form.id) {
         // 这里面调用编辑接口
-        await editorClient(this.form)
+        await editorProperties(this.form)
         this.$message.success('修改成功')
       } else {
         // 验证成功  调用新增接口
-        await addClient(this.form)
+        await addProperties(this.form)
         this.$message.success('添加成功')
       }
       // 告诉父组件  刷新页面
@@ -144,11 +144,12 @@ export default {
 }
 </script>
 <style scoped>
-  ::v-deep.el-dialog__wrapper>.el-dialog{
-    transform: translateY(-5vh);
-    width: 600px;
-  }
-  ::v-deep .el-dialog__wrapper>.el-dialog>.el-dialog__body{
-    padding: 30px 40px;
-  }
+::v-deep.el-dialog__wrapper>.el-dialog {
+  transform: translateY(-5vh);
+  width: 600px;
+}
+
+::v-deep .el-dialog__wrapper>.el-dialog>.el-dialog__body {
+  padding: 30px 40px;
+}
 </style>
