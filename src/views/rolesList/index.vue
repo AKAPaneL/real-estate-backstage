@@ -112,6 +112,7 @@ export default {
       this.showRoleDialog = false
       // 列表更新
       this.loadRoles()
+      this.loadEmployees()
     },
     addRole() {
       // 重置表单
@@ -139,8 +140,12 @@ export default {
       this.$message.success('删除成功')
       // 调用接口
       await deleteRoles(id)
+      if (this.rolesList.length === 1) {
+        this.currentPage -= 1
+      }
       // 页面刷新
       this.loadRoles()
+      this.loadEmployees()
     }
 
   }
