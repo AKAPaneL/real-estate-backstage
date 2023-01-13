@@ -7,8 +7,13 @@
         </el-form-item>
         <el-form-item label="内容" prop="content">
           <div class="local-quill-editor">
-            <quill-editor ref="quill" v-model="ruleForm.content" :options="editorOption" class="editor"
-              @blur="$refs.ruleForm.validateField('content')" />
+            <quill-editor
+              ref="quill"
+              v-model="ruleForm.content"
+              :options="editorOption"
+              class="editor"
+              @blur="$refs.ruleForm.validateField('content')"
+            />
           </div>
         </el-form-item>
         <el-form-item class="button-style">
