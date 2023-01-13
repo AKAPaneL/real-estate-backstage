@@ -2,7 +2,7 @@ import layout from '@/layout'
 
 export default {
   path: '/clientslist',
-  name: 'clientslist',
+  name: 'ClientsList',
   component: layout,
   children: [
     {
@@ -10,7 +10,7 @@ export default {
       component: () => import('@/views/clients-list'),
       meta: {
         title: '客户管理',
-        icon: 'lock'
+        icon: 'form'
       }
     }
   ]

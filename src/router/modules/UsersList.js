@@ -2,15 +2,15 @@ import layout from '@/layout'
 
 export default {
   path: '/userslist',
-  name: 'userslist',
+  name: 'UsersList',
   component: layout,
   children: [
     {
       path: '',
-      component: () => import('@/views/users-list'),
+      component: () => import('@/views/usersList'),
       meta: {
         title: '员工管理',
-        icon: 'lock'
+        icon: 'user'
       }
     }
   ]

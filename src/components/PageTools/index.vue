@@ -1,28 +1,21 @@
 <template>
-  <div>
-    <el-card class="box-card">
-      <div class="header">
-        <span><el-button type="primary">
-            <slot name="before" />
-            <!-- 定义前面得插槽 -->
-          </el-button></span>
-        <span class="search-class"> <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-input></span>
-      </div>
-      <el-table :data="tableData" border style="width: 100%">
-        <el-table-column prop="picture" label="图片" width="180">
-        </el-table-column>
-        <el-table-column prop="name" label="姓名" width="180">
-        </el-table-column>
-        <el-table-column prop="address" label="地址">
-        </el-table-column>
-      </el-table>
-
-    </el-card>
-  </div>
-
-
+  <el-card class="page-tools">
+    <el-row type="flex" justify="space-between" align="middle">
+      <el-col>
+        <div v-if="showBefore" class="before">
+          <i class="el-icon-info" />
+          <!-- 定义前面得插槽 -->
+          <slot name="before" />
+        </div>
+      </el-col>
+      <el-col>
+        <el-row type="flex" justify="end">
+          <!-- 定义后面的插槽 -->
+          <slot name="after" />
+        </el-row>
+      </el-col>
+    </el-row>
+  </el-card>
 </template>
 
 <script>
@@ -37,15 +30,20 @@ export default {
 }
 </script>
 
-<style scoped>
-.header {
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #DCDCDC;
-}
-
-.search-class {
-  float: right;
-  width: 500px;
-}
+<style lang='scss'>
+ .page-tools {
+    margin: 10px 0;
+    .before {
+      line-height: 34px;
+    i {
+      margin-right: 5px;
+      color: #409eff;
+    }
+    display: inline-block;
+    padding: 0px 10px;
+    border-radius: 3px;
+    border: 1px solid rgba(145, 213, 255, 1);
+    background: rgba(230, 247, 255, 1);
+  }
+ }
 </style>

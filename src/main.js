@@ -16,6 +16,9 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import '@/directives'
 
+// 富文本组件
+import './utils/editor'
+
 import components from './components'
 // Vue.use会触发install方法
 Vue.use(components)

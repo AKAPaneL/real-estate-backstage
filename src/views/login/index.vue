@@ -3,7 +3,10 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">房地产后台管理系统</h3>
+        <h3 class="title">
+          <img src="@/assets/common/logo.png" alt="" width="80px">
+          房地产后台管理系统
+        </h3>
       </div>
 
       <el-form-item v-if="isRegister" prop="email">
@@ -225,7 +228,7 @@ $light_gray:#eee;
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 120px 35px 0;
     margin: 0 auto;
     overflow: hidden;
   }
@@ -260,11 +263,18 @@ $light_gray:#eee;
     position: relative;
 
     .title {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       font-size: 26px;
       color: $light_gray;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
+      img{
+        margin-bottom: 20px;
+      }
     }
   }
 

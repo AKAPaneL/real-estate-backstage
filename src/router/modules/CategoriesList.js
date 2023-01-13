@@ -2,7 +2,7 @@ import layout from '@/layout'
 
 export default {
   path: '/categorieslist',
-  name: 'categorieslist',
+  name: 'CategoriesList',
   component: layout,
   children: [
     {

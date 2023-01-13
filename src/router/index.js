@@ -38,7 +38,7 @@ import PermissionsList from './modules/PermissionsList'
 import RolesList from './modules/RolesList'
 import UsersList from './modules/UsersList'
 import PropertiesList from './modules/PropertiesList'
-const routes = [
+export const asyncRoutes = [
   AgentsList,
   PropertiesList,
   CategoriesList,
@@ -76,7 +76,7 @@ export const constantRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: [...constantRoutes, ...routes, { path: '*', redirect: '/404', hidden: true }]
+  routes: [...constantRoutes]
 })
 
 const router = createRouter()
