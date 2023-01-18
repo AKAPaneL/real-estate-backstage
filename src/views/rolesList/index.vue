@@ -19,9 +19,9 @@
           prop="description"
           label="角色描述"
         />
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="280px">
           <template #default="{row}">
-            <el-button type="primary" @click="$refs.permission.show()">分配权限</el-button>
+            <el-button type="primary" @click="editPermission(row.id)">分配权限</el-button>
             <el-button @click="editRole(row.id)">编辑</el-button>
             <el-button type="danger" @click="delRole(row.id)">删除</el-button>
           </template>
@@ -60,6 +60,7 @@
 <script>
 import { getRoles, deleteRoles, createRoles,
   getRolesId, getEditRoles, getRolesCount } from '@/api/rolesList'
+
 import permission from './components/permission.vue'
 export default {
   components: {
@@ -82,7 +83,7 @@ export default {
   },
   created() {
     this.loadRoles()
-    this.loadEmployees()
+    this.loadRolesCount()
   },
   methods: {
     async loadRoles() {
@@ -92,7 +93,7 @@ export default {
       })
       this.rolesList = res
     },
-    async loadEmployees() {
+    async loadRolesCount() {
       this.loading = true // 加载中
       const res = await getRolesCount()
       this.total = res
@@ -112,7 +113,7 @@ export default {
       this.showRoleDialog = false
       // 列表更新
       this.loadRoles()
-      this.loadEmployees()
+      this.loadRolesCount()
     },
     addRole() {
       // 重置表单
@@ -136,18 +137,27 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
-      // 提示用户
-      this.$message.success('删除成功')
       // 调用接口
       await deleteRoles(id)
       if (this.rolesList.length === 1) {
         this.currentPage -= 1
       }
+      // 提示用户
+      this.$message.success('删除成功')
       // 页面刷新
       this.loadRoles()
-      this.loadEmployees()
+      this.loadRolesCount()
+    },
+    async editPermission(id) {
+      const res = await getRolesId(id)
+      if (res) {
+        this.$refs.permission.roleId = id
+        this.$refs.permission.checkList = res.permissions.map(item => item.id)
+        this.$refs.permission.show()
+      } else {
+        this.$message.error('该用户不存在，请刷新页面')
+      }
     }
-
   }
 }
 </script>
