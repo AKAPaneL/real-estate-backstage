@@ -19,7 +19,7 @@
           prop="description"
           label="角色描述"
         />
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="280px">
           <template #default="{row}">
             <el-button type="primary" @click="$refs.permission.show()">分配权限</el-button>
             <el-button @click="editRole(row.id)">编辑</el-button>
@@ -60,6 +60,7 @@
 <script>
 import { getRoles, deleteRoles, createRoles,
   getRolesId, getEditRoles, getRolesCount } from '@/api/rolesList'
+
 import permission from './components/permission.vue'
 export default {
   components: {
@@ -82,7 +83,7 @@ export default {
   },
   created() {
     this.loadRoles()
-    this.loadEmployees()
+    this.loadRolesCount()
   },
   methods: {
     async loadRoles() {
@@ -90,9 +91,10 @@ export default {
         _limit: this.limit,
         _start: (this.currentPage - 1) * 2
       })
+      console.log(res)
       this.rolesList = res
     },
-    async loadEmployees() {
+    async loadRolesCount() {
       this.loading = true // 加载中
       const res = await getRolesCount()
       this.total = res
@@ -112,7 +114,7 @@ export default {
       this.showRoleDialog = false
       // 列表更新
       this.loadRoles()
-      this.loadEmployees()
+      this.loadRolesCount()
     },
     addRole() {
       // 重置表单
@@ -145,7 +147,7 @@ export default {
       }
       // 页面刷新
       this.loadRoles()
-      this.loadEmployees()
+      this.loadRolesCount()
     }
 
   }
