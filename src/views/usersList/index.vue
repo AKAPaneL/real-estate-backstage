@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       usersList: [],
-      limit: 2,
+      limit: 6,
       start: 0,
       visible: false
     }

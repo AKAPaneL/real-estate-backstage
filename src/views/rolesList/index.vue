@@ -21,7 +21,7 @@
         />
         <el-table-column label="操作" width="280px">
           <template #default="{row}">
-            <el-button type="primary" @click="$refs.permission.show()">分配权限</el-button>
+            <el-button type="primary" @click="editPermission(row.id)">分配权限</el-button>
             <el-button @click="editRole(row.id)">编辑</el-button>
             <el-button type="danger" @click="delRole(row.id)">删除</el-button>
           </template>
@@ -91,7 +91,6 @@ export default {
         _limit: this.limit,
         _start: (this.currentPage - 1) * 2
       })
-      console.log(res)
       this.rolesList = res
     },
     async loadRolesCount() {
@@ -138,18 +137,27 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
-      // 提示用户
-      this.$message.success('删除成功')
       // 调用接口
       await deleteRoles(id)
       if (this.rolesList.length === 1) {
         this.currentPage -= 1
       }
+      // 提示用户
+      this.$message.success('删除成功')
       // 页面刷新
       this.loadRoles()
       this.loadRolesCount()
+    },
+    async editPermission(id) {
+      const res = await getRolesId(id)
+      if (res) {
+        this.$refs.permission.roleId = id
+        this.$refs.permission.checkList = res.permissions.map(item => item.id)
+        this.$refs.permission.show()
+      } else {
+        this.$message.error('该用户不存在，请刷新页面')
+      }
     }
-
   }
 }
 </script>
