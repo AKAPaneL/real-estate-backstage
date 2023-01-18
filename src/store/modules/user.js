@@ -2,6 +2,7 @@ import { login, getUser } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { getUserPermission } from '@/api/permission'
 import { resetRouter } from '@/router'
+import { Message } from 'element-ui'
 
 export default {
   namespaced: true,
@@ -35,10 +36,7 @@ export default {
     async login({ commit }, data) {
       const { jwt, user } = await login(data)
       commit('setToken', jwt)
-      commit('setUser', user)
-      // 获取用户权限
-      const res = await getUserPermission()
-      commit('setPermission', res)
+      Message.success(`欢迎！${user.username}`)
     },
     // 登出接口
     logout({ commit }) {

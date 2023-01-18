@@ -17,12 +17,17 @@ router.beforeEach(async(to, from, next) => {
   // 判断要去的页面
   if (to.path === '/login') {
     // 如果要去的是登录页  放行
-    next()
+    if (store.getters.token) {
+      next('/')
+    } else {
+      next()
+    }
   } else {
     // 如果是去除了登录页以外的页面 :
     // 1.判断是否有token值 :
     // a) 如果有 :判断是否vuex已经有个人信息,如果没有 要先获取用户的资料存在vuex中
     // b)如果没有,则不准用户进去这个页面 应该要跳转到登录页
+    console.log(1)
     if (store.getters.token) {
       if (!store.state.user.userInfo) {
         await store.dispatch('user/getUser')
@@ -41,22 +46,6 @@ router.beforeEach(async(to, from, next) => {
         router.options.routes = [...constantRoutes, ...routes]
         router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }])
         next(to.path)
-      } else if (from.path === '/login') {
-        // 如果来自登录页  有token  有user  也要获取权限
-        const { menus } = store.state.user.permission
-        const routes = []
-        // 找到符合权限列表 对应的 路由名字
-        menus.forEach(item => {
-          const route = asyncRoutes.find(obj => obj.name === item.substr(3))
-          if (route) {
-            routes.push(route)
-          }
-        })
-        // 动态添加路由
-        console.log(routes)
-        router.options.routes = [...constantRoutes, ...routes]
-        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }])
-        next()
       } else {
         next()
       }

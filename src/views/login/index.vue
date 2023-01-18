@@ -138,7 +138,6 @@ export default {
         this.$store.dispatch('user/login', { identifier, password }).then(() => {
           this.$router.push({ path: this.redirect || '/' })
           this.$refs.loginForm.resetFields()
-          this.$message.success(`欢迎！${this.$store.state.user.userInfo.username}`)
           this.loading = false
         }).catch(() => {
           this.loading = false
