@@ -20,3 +20,8 @@ export function getUser() {
   return request.get('/users/me')
 }
 
+// 编辑用户
+export function editUser(data) {
+  return request.put(`/users/${data.id}`, data)
+}
+

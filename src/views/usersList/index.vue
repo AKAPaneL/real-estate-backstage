@@ -22,7 +22,7 @@
         <el-table-column label="操作">
           <template #default="{row}">
             <el-button type="primary">设置角色</el-button>
-            <el-button>编辑</el-button>
+            <el-button @click="test(row.id)">编辑</el-button>
             <el-button type="danger" @click="delList(row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -52,11 +52,12 @@
 
 <script>
 import { getUsersList, getDelList, createUsers } from '@/api/employees'
+import { editUser } from '@/api/user'
 export default {
   data() {
     return {
       usersList: [],
-      limit: 6,
+      limit: 999,
       start: 0,
       visible: false
     }
@@ -96,6 +97,12 @@ export default {
       await getDelList(id)
       // 刷新页面
       this.loadEmployeeList()
+    },
+    async test(id) {
+      await editUser({
+        id: id,
+        roles: [1]
+      })
     }
   }
 
