@@ -25,3 +25,7 @@ export function editUser(data) {
   return request.put(`/users/${data.id}`, data)
 }
 
+export function getUserById(id) {
+  return request.get(`/users/${id}`)
+}
+

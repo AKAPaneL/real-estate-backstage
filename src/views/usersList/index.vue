@@ -19,9 +19,9 @@
           label="邮箱"
           prop="email"
         />
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="280px">
           <template #default="{row}">
-            <el-button type="primary">设置角色</el-button>
+            <el-button type="primary" @click="editRole(row.id)">设置角色</el-button>
             <el-button @click="test(row.id)">编辑</el-button>
             <el-button type="danger" @click="delList(row.id)">删除</el-button>
           </template>
@@ -47,13 +47,18 @@
         </div>
       </template>
     </el-dialog>
+    <editRole ref="role" />
   </div>
 </template>
 
 <script>
+import editRole from './components/edit-role.vue'
 import { getUsersList, getDelList, createUsers } from '@/api/employees'
-import { editUser } from '@/api/user'
+import { getUserById } from '@/api/user'
 export default {
+  components: {
+    editRole
+  },
   data() {
     return {
       usersList: [],
@@ -98,11 +103,11 @@ export default {
       // 刷新页面
       this.loadEmployeeList()
     },
-    async test(id) {
-      await editUser({
-        id: id,
-        roles: [1]
-      })
+    async editRole(id) {
+      const res = await getUserById(id)
+      this.$refs.role.userId = id
+      this.$refs.role.checkList = res.roles.map(item => item.id)
+      this.$refs.role.show()
     }
   }
 

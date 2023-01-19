@@ -124,6 +124,7 @@ export default {
   methods: {
     // 获取 用户列表 要判断是否有参数
     async loadClientsList() {
+      console.log(1)
       let res = {}
       // 如果没有参数
       if (!(this.name_contains || this.agent !== '全部经纪人')) {
