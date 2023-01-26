@@ -14,9 +14,11 @@
     "test:ci": "npm run lint && npm run test:unit"
   },
   "dependencies": {
+    "@jiaminghi/data-view": "^2.10.0",
     "axios": "0.18.1",
     "core-js": "3.6.5",
     "cos-js-sdk-v5": "^1.4.15",
+    "echarts": "^5.4.1",
     "element-ui": "2.13.2",
     "js-cookie": "2.2.0",
     "normalize.css": "7.0.0",
