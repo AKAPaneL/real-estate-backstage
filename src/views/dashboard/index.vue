@@ -21,10 +21,10 @@
             <div>
               <div>
                 <ul class="rate">
-                  <li v-for="item in 2" :key="item">
-                    <p>今日任务达标率</p>
+                  <li v-for="item in rateList" :key="item.id" class="border">
+                    <p>{{ item.title }}</p>
                     <div>
-                      饼图
+                      <pieRate :count="item.count" />
                     </div>
                   </li>
                 </ul>
@@ -38,36 +38,41 @@
         <!--左边-- 柱状图布局 -->
         <div class="left-chart-2">
           <chartsTitle icon="fsux-bar" />
-          <div>bar</div>
+          <div>
+            <bar />
+          </div>
         </div>
       </div>
       <!-- 中间布局 -->
       <div class="center-chart">
         <div class="map">
-          <chartsTitle icon="fsux-map" />
-          <div>地图</div>
+          <chartsTitle icon="fsux-map">地图数据</chartsTitle>
+          <div>
+            <bjMap />
+          </div>
         </div>
         <div class="capsule-chart">
-          <chartsTitle icon="fsux-bar" />
-          胶囊图片
+          <chartsTitle icon="fsux-bar">北京地区房价排行榜</chartsTitle>
+          <capsuleChart />
         </div>
       </div>
       <!-- 右边布局 -->
       <div class="right-chart">
         <div class="right-chart-1">
           <div class="pie">
-            <chartsTitle icon="fsux-pie" />
-            饼状图
+            <chartsTitle icon="fsux-pie">任务通过率</chartsTitle>
+            <pieNight />
           </div>
           <div class="block">
-            <chartsTitle icon="fsux-block" />
-            榜单2
-
+            <chartsTitle icon="fsux-block">各地区房价以及变动</chartsTitle>
+            <scrollBoard />
           </div>
         </div>
         <div class="line">
-          <chartsTitle icon="fsux-line" />
-          折线图
+          <chartsTitle icon="fsux-line">Top3地区房价变动</chartsTitle>
+          <div>
+            <lineChart />
+          </div>
         </div>
       </div>
 
@@ -79,12 +84,26 @@
 import { mapGetters } from 'vuex'
 import scrollRanking from './components/scroll-ranking.vue'
 import chartsTitle from './components/charts-title.vue'
+import pieRate from './components/pie-rate.vue'
+import capsuleChart from './components/capsule-chart.vue'
+import bar from './components/bar.vue'
+import lineChart from './components/line-chart.vue'
+import scrollBoard from './components/scroll-board.vue'
+import pieNight from './components/pie-night.vue'
+import bjMap from './components/bjMap.vue'
 
 export default {
   name: 'Dashboard',
   components: {
+    bjMap,
     scrollRanking,
-    chartsTitle
+    chartsTitle,
+    pieRate,
+    capsuleChart,
+    lineChart,
+    bar,
+    scrollBoard,
+    pieNight
   },
   data() {
     return {
@@ -125,7 +144,19 @@ export default {
         shape: 'roundRect',
         waveHeight: 15,
         colors: ['#b6a2de']
-      }
+      },
+      rateList: [
+        {
+          id: 1,
+          count: 60,
+          title: '今日任务达标率'
+        },
+        {
+          id: 2,
+          count: 40,
+          title: '本月任务达标率'
+        }
+      ]
     }
   },
   computed: {
@@ -141,8 +172,9 @@ export default {
   &-container {
     // background-color: #212733;
     // color: #fff;
-    // min-height: calc(100vh - 50px);
+    min-height: calc(100vh - 50px);
     background-color: #f4f4f4;
+    overflow: auto;
     li{
       list-style: none;
     }
@@ -157,21 +189,28 @@ export default {
   }
 
 }
+.border{
+  box-shadow: 0 2px 12px 0 rgba(59, 59, 59, 0.1);
+}
 .chart-container{
   display: flex;
-  justify-content: space-between;
+  justify-content:space-between;
   overflow: auto;
+  width: 1322px;
+  margin: 0 auto;
   &>div{
     flex-shrink: 0;
   }
 }
 .left-chart{
   width: 415px;
-  margin-left: 10px;
+  margin-left: 8px;
+  margin-bottom: 8px;
 }
 .center-chart{
   width:450px;
-  margin-left: 10px;
+  margin-left: 8px;
+  margin-bottom: 8px;
 }
 .map{
   padding: 5px;
@@ -187,8 +226,10 @@ export default {
   box-shadow: 0 2px 12px 0 rgba(59, 59, 59, 0.1);
 }
 .right-chart{
-  width: 435px;
-  margin-left: 10px;
+  width: 425px;
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-bottom: 8px;
   .right-chart-1{
     display: flex;
     justify-content: space-between;
@@ -199,6 +240,9 @@ export default {
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 12px 0 rgba(59, 59, 59, 0.1);
+  }
+  .block{
+    width: 205px;
   }
   .line{
     width: 100%;
@@ -257,6 +301,9 @@ export default {
       background-color: #fff;
       border-radius: 3px;
       margin-bottom: 5px;
+    }
+    p{
+      line-height: 20px;
     }
   }
 }
