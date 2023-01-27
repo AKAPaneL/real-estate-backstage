@@ -1,7 +1,13 @@
 <template>
   <div class="dashboard-container">
     <!-- 顶部 title  -->
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">
+      <div class="dashboard-header border">
+        <span>欢迎您： {{ name }}！</span>
+        <p>房地产数据可视化</p>
+        <span>{{ time }}</span>
+      </div>
+    </div>
     <!-- 图表 container -->
     <div class="chart-container">
       <!-- 左边布局 -->
@@ -37,7 +43,7 @@
         </div>
         <!--左边-- 柱状图布局 -->
         <div class="left-chart-2">
-          <chartsTitle icon="fsux-bar" />
+          <chartsTitle icon="fsux-bar">同期房价对比</chartsTitle>
           <div>
             <bar />
           </div>
@@ -91,6 +97,8 @@ import lineChart from './components/line-chart.vue'
 import scrollBoard from './components/scroll-board.vue'
 import pieNight from './components/pie-night.vue'
 import bjMap from './components/bjMap.vue'
+import moment from 'moment'
+moment.locale('zh-cn')
 
 export default {
   name: 'Dashboard',
@@ -156,13 +164,19 @@ export default {
           count: 40,
           title: '本月任务达标率'
         }
-      ]
+      ],
+      time: ''
     }
   },
   computed: {
     ...mapGetters([
       'name'
     ])
+  },
+  created() {
+    setInterval(() => {
+      this.time = moment().format('llll')
+    }, 1000)
   }
 }
 </script>
@@ -184,8 +198,32 @@ export default {
     }
   }
   &-text {
-    font-size: 30px;
-    line-height: 50px;
+    line-height: 40px;
+    width: 1322px;
+    margin: 0 auto;
+    .dashboard-header{
+      display: flex;
+      background-color: #fff;
+      justify-content: space-between;
+      height: 40px;
+      margin: 5px 8px;
+      border-radius: 5px;
+      padding: 0 10px;
+      p{
+        width: 400px;
+        text-align: center;
+        font-size: 24px;
+        color: #0c90d0;
+      }
+      span{
+        width: 400px;
+        font-size: 18px;
+        &:nth-child(3){
+          font-size: 14px;
+          text-align: right;
+        }
+      }
+  }
   }
 
 }
