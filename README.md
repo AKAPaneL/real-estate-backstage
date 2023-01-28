@@ -6,7 +6,7 @@ Related technology stack：Vue 2.x+ Vue router + Vuex + element-ui + axios + Ech
 
 ## 项目截图
 
-![dashboard](.\src\assets\common\dashboard.png)
+![输入图片说明](src/assets/common/dashboard.png)
 
 # vue-admin-template
 
