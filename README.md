@@ -1,3 +1,13 @@
+# Real estate-backstage
+
+ This is a simple real estate company background management system, based on vue-admin-template project secondary development 
+
+Related technology stack：Vue 2.x+ Vue router + Vuex + element-ui + axios + Echarts +  DataV
+
+## 项目截图
+
+![dashboard](.\src\assets\common\dashboard.png)
+
 # vue-admin-template
 
 English | [简体中文](./README-zh.md)
@@ -63,10 +73,6 @@ npm run lint -- --fix
 ```
 
 Refer to [Documentation](https://panjiachen.github.io/vue-element-admin-site/guide/essentials/deploy.html) for more information
-
-## Demo
-
-![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
 
 ## Extra
 
