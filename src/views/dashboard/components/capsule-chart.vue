@@ -8,24 +8,24 @@ export default {
       config: {
         data: [
           {
-            name: '南阳',
-            value: 20
+            name: '东城区',
+            value: 120
           },
           {
-            name: '周口',
-            value: 14
+            name: '西城区',
+            value: 110
           },
           {
-            name: '漯河',
-            value: 32
+            name: '朝阳区',
+            value: 77
           },
           {
-            name: '郑州',
-            value: 13
+            name: '海淀区',
+            value: 90
           },
           {
-            name: '西峡',
-            value: 16
+            name: '丰台区',
+            value: 60
           }
         ],
         unit: 'K/平方'

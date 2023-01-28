@@ -8,14 +8,14 @@ export default {
       config: {
         header: ['地区', '房价', '变化率'],
         data: [
-          ['地区1', '12k', '<span class="up"><i class="iconfont icon-jiantou_xiangshang_o"></i>13%</span>'],
-          ['地区2', '12k', '<span class="up"><i class="iconfont icon-jiantou_xiangshang_o"></i>8%</span>'],
-          ['地区3', '12k', '<span class="down"><i class="iconfont icon-jiantou_xiangxia_o-copy"></i>17%</span>'],
-          ['地区4', '12k', '<span class="up"><i class="iconfont icon-jiantou_xiangshang_o"></i>33%</span>'],
-          ['地区5', '12k', '<span class="up"><i class="iconfont icon-jiantou_xiangshang_o"></i>24%</span>'],
-          ['地区6', '12k', '<span class="down"><i class="iconfont icon-jiantou_xiangxia_o-copy"></i>26%</span>'],
-          ['地区7', '12k', '<span class="down"><i class="iconfont icon-jiantou_xiangxia_o-copy"></i>42%</span>'],
-          ['地区8', '12k', '<span class="down"><i class="iconfont icon-jiantou_xiangxia_o-copy"></i>33%</span>']
+          ['西城区', '120k', '<span class="up"><i class="iconfont icon-jiantou_xiangshang_o"></i>13%</span>'],
+          ['东城区', '110k', '<span class="up"><i class="iconfont icon-jiantou_xiangshang_o"></i>8%</span>'],
+          ['朝阳区', '77k', '<span class="down"><i class="iconfont icon-jiantou_xiangxia_o-copy"></i>17%</span>'],
+          ['海淀区', '90k', '<span class="up"><i class="iconfont icon-jiantou_xiangshang_o"></i>33%</span>'],
+          ['丰台区', '64k', '<span class="up"><i class="iconfont icon-jiantou_xiangshang_o"></i>24%</span>'],
+          ['通州区', '47k', '<span class="down"><i class="iconfont icon-jiantou_xiangxia_o-copy"></i>26%</span>'],
+          ['石景山区', '61k', '<span class="down"><i class="iconfont icon-jiantou_xiangxia_o-copy"></i>42%</span>'],
+          ['顺义区', '49k', '<span class="down"><i class="iconfont icon-jiantou_xiangxia_o-copy"></i>33%</span>']
         ],
         hoverPause: true,
         headerBGC: '#2ec7c9',

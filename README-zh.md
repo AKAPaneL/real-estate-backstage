@@ -1,4 +1,14 @@
-# vue-admin-template
+# Real estate-backstage
+
+这是一个简单的房地产公司后台管理系统，基于vue-admin-template项目的二次开发
+
+相关技术栈：Vue 2.x+ Vue router + Vuex + element-ui + axios + Echarts +  DataV
+
+## 项目截图
+
+
+
+## vue-admin-template
 
 > 这是一个极简的 vue admin 管理后台。它只包含了 Element UI & axios & iconfont & permission control & lint，这些搭建后台必要的东西。
 
@@ -88,13 +98,7 @@ npm run lint -- --fix
 
 更多信息请参考 [使用文档](https://panjiachen.github.io/vue-element-admin-site/zh/)
 
-## 购买贴纸
 
-你也可以通过 购买[官方授权的贴纸](https://smallsticker.com/product/vue-element-admin) 的方式来支持 vue-element-admin - 每售出一张贴纸，我们将获得 2 元的捐赠。
-
-## Demo
-
-![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
 
 ## Browsers support
 

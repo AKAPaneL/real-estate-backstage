@@ -8,32 +8,32 @@ export default {
       config: {
         data: [
           {
-            name: '周口',
-            value: 55
+            name: '怀柔区',
+            value: 15
           },
           {
-            name: '南阳',
-            value: 120
+            name: '顺义区',
+            value: 18
           },
           {
-            name: '西峡',
-            value: 78
+            name: '海淀区',
+            value: 31
           },
           {
-            name: '驻马店',
-            value: 66
+            name: '朝阳区',
+            value: 16
           },
           {
-            name: '新乡',
-            value: 80
+            name: '丰台区',
+            value: 21
           },
           {
-            name: '信阳',
-            value: 45
+            name: '石景山区',
+            value: 14
           },
           {
-            name: '漯河',
-            value: 29
+            name: '延庆区',
+            value: 7
           }
         ],
         unit: '套'
